@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+        <properties url="${mybatis.generator.generatorConfig.properties}"/>
+        <!-- 数据库驱动包位置 -->
+        <classPathEntry location="${drive.class.path}" />
+        <!-- <classPathEntry location="C:\oracle\product\10.2.0\db_1\jdbc\lib\ojdbc14.jar" />-->
+        <context id="DB2Tables" targetRuntime="MyBatis3">
+                <commentGenerator>
+                        <property name="suppressAllComments" value="true" />
+                </commentGenerator>
+                <!-- 数据库链接URL、用户名、密码 -->
+                <jdbcConnection driverClass="${jdbc.driver}" connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}">
+                        <!--<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@localhost:1521:orcl" userId="msa" password="msa">-->
+                </jdbcConnection>
+                <javaTypeResolver>
+                        <property name="forceBigDecimals" value="false" />
+                </javaTypeResolver>
+                <!-- 生成模型的包名和位置 -->
+                <javaModelGenerator targetPackage="${model.package}" targetProject="${target.project}">
+                        <property name="enableSubPackages" value="true" />
+                        <property name="trimStrings" value="true" />
+                </javaModelGenerator>
+                <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+                <table tableName="usersurface" domainObjectName="Usersurface" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+                <table tableName="dept" domainObjectName="Dept" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+                <table tableName="post" domainObjectName="Post" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+                <table tableName="menu" domainObjectName="Menu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+                <table tableName="user_post" domainObjectName="User_Post" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+                <table tableName="post_menu" domainObjectName="Post_Menu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+        </context>
+
+</generatorConfiguration>
