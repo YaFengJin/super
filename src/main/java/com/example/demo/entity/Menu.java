@@ -5,7 +5,7 @@ import java.util.List;
 public class Menu {
     private Integer menuid;
 
-    private String menufid;
+    private Integer menufid;
 
     private String menuname;
 
@@ -21,12 +21,12 @@ public class Menu {
         this.menuid = menuid;
     }
 
-    public String getMenufid() {
+    public Integer getMenufid() {
         return menufid;
     }
 
-    public void setMenufid(String menufid) {
-        this.menufid = menufid == null ? null : menufid.trim();
+    public void setMenufid(Integer menufid) {
+        this.menufid=menufid;
     }
 
     public String getMenuname() {
@@ -45,7 +45,7 @@ public class Menu {
         this.menuurl = menuurl == null ? null : menuurl.trim();
     }
 
-    public Menu(Integer menuid, String menufid, String menuname, String menuurl, List<Post_Menu> post_menus) {
+    public Menu(Integer menuid, Integer menufid, String menuname, String menuurl, List<Post_Menu> post_menus) {
         this.menuid = menuid;
         this.menufid = menufid;
         this.menuname = menuname;
