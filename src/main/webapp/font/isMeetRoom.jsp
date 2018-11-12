@@ -219,7 +219,7 @@
         dataType:"json",
         success:function(data){
         alert(data.message);
-        window.location.reload();
+        window.parent.location.reload();
         },
         error:function(){
         alert("添加失败");

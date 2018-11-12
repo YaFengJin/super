@@ -7,20 +7,17 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="layui/css/layui.css">
     <%--弹出框--%>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../static/layui/css/layui.css"  media="all">
 </head>
-<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="layui/layui.js"></script>
-<script src="<%=basePath %>/static/layui/layui.js"></script>
-<script src="<%=basePath %>/static/layui/lay/modules/form.js"></script>
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../static/layui/layui.js"></script>
+<script type="text/javascript"t src="../static/layui/lay/modules/form.js"></script>
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+<script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
 <body>
 <center>
 <div style="margin-top: 17px;margin-left: 900px;">
@@ -108,23 +105,20 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs sc" lay-event="dele" >删除</a>
    <a class="layui-btn layui-btn-xs" lay-event="cx" >权限设置</a>
 </script>
-<script>
+<script type="text/javascript">
     layui.use(['form','table','laydate',], function () {
         var form = layui.form,
             laydate = layui.laydate,
             $=layui.jquery;
         var a = "";
         fall(a);
-
     });
     /*
      * 清空编辑后传入的值
      * */
     $("#wjs").click(function () {
-
         $("input[name='Filing_cabinetName']").val("");
-
-    })
+    });
     //查询
     function fall(kwx) {
         var table = layui.table //表格

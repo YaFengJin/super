@@ -49,7 +49,7 @@ public class CheckMeetServiceImp implements CheckMeetService {
      * 每六秒执行一次
      */
     @Override
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 60000)
     public void isUpdateMeetFlag() {
         dao.isUpdateMeetFlag();
     }

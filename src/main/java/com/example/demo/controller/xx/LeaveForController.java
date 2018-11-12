@@ -61,6 +61,7 @@ public class LeaveForController {
     @RequestMapping(value = "/xxLezveForUpdate")
     public Map xxLezveForUpdate(Leavefor leaveFor,String name){
         Map<String,Object> map = new HashMap<String,Object>();
+        System.out.println("cccccc:"+name);
             int a = service.xxLezveForUpdate(leaveFor,name);
             if (a>=1){
                 map.put("message","提交成功");

@@ -10,20 +10,42 @@ import java.util.Map;
 public interface CheckDao {
     /*查询考勤记录&gt;大于号  &lt;小于号*/
     @Select("<script>SELECT c.* FROM checksurface as c , usersurface as u where c.UserId = u.UserId " +
+            "<if test = 'sid > 0 and jid == 1'>" +
             " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
             " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
-            "<if test = 'sid > 0 and jid == 1'> and c.UserId = #{sid} GROUP BY c.UserId </if>" +
-            "<if test = 'sid > 0 and jid == 0'> and c.UserId = #{sid} </if>" +
+            " and c.UserId = #{sid} GROUP BY c.UserId </if>" +
+            "<if test = 'sid == 1 and jid == 0'> and 1=1 " +
+            " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
+            " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
+            "</if>" +
+            "<if test = 'sid == 1 and jid == 0 and month != null and month != \"\" '> and 1=1 " +
+            " AND DATE_FORMAT(c.CheckTime,'%Y-%m') = #{month} " +
+            "</if>" +
+            "<if test = 'sid > 1 and jid == 0'> and c.UserId = #{sid} " +
+            " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
+            " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
+            "</if>" +
             "</script>")
-    List<Checksurface> xxChecksurfaceSelect(@Param("sid") int sid, @Param("jid") int jid);
+    List<Checksurface> xxChecksurfaceSelect(@Param("sid") int sid, @Param("jid") int jid, @Param("month") String month);
     /*查询考勤记录*/
     @Select("<script>SELECT c.* FROM checksurface as c , usersurface as u where c.UserId = u.UserId" +
+            "<if test = 'sid > 0 and jid == 1'>" +
             " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
             " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
-            "<if test = 'sid > 0 and jid == 1'> and c.UserId = #{sid} GROUP BY c.UserId </if>" +
-            "<if test = 'sid > 0 and jid == 0'> and c.UserId = #{sid} </if>" +
+            " and c.UserId = #{sid} GROUP BY c.UserId </if>" +
+            "<if test = 'sid == 1 and jid == 0'> and 1=1 " +
+            " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
+            " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
+            "</if>" +
+            "<if test = 'sid == 1 and jid == 0 and month != null and month != \"\" '> and 1=1 " +
+            " AND DATE_FORMAT(c.CheckTime,'%Y-%m') = #{month} " +
+            "</if>" +
+            "<if test = 'sid > 1 and jid == 0'> and c.UserId = #{sid} " +
+            " AND c.CheckTime &lt;= DATE_FORMAT(curdate(),'%Y-%m-%d') " +
+            " AND c.CheckTime &gt;= DATE_FORMAT(DATE_ADD(curdate(),interval -day(curdate())+1 day),'%Y-%m-%d')" +
+            "</if>" +
             "</script>")
-    List<Checksurface> xxChecksurfaceSelect1(@Param("sid") int sid, @Param("jid") int jid);
+    List<Checksurface> xxChecksurfaceSelect1(@Param("sid") int sid, @Param("jid") int jid, @Param("month") String month);
     /*查询排班*/
     @Select("select * from arrangemanage where Statusn = 0")
     List<Arrangemanage> xxArrangemanageselect1();

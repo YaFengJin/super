@@ -20,12 +20,22 @@ public interface LeaveForDao {
             ")")
     int xxLeaveForInsert(Leavefor leaveFor);
     /*更改状态*/
-    @Update("update leavefor set LeaveState = #{leaveState} where Leave_ForId = #{leaveForId}")
+    @Update("<script> update leavefor set LeaveState = #{leaveState}" +
+            "<if test='gender != null and gender != \"\" '>,Gender = #{gender}</if>" +
+            "where Leave_ForId = #{leaveForId}" +
+            "</script>")
     int xxLezveForUpdate(Leavefor leaveFor);
     /*更改请假*/
-    @Update("update leavefor set UserId = #{userId},RatyfyUser=#{ratyfyUser},BeginTime=#{beginTime},OverTime=#{overTime}," +
-            "LeaveTime = #{leaveTime},ForCause=#{forCause},LeaveType=#{leaveType},LeaveNumber=#{leaveNumber} " +
-            "where Leave_ForId = #{leaveForId}")
+    @Update("<script>update leavefor set" +
+            "<if test='userId != null and userId != \"\" '> UserId = #{userId},</if>" +
+            "<if test='ratyfyUser != null and ratyfyUser != \"\" '> RatyfyUser=#{ratyfyUser},</if>" +
+            "<if test='beginTime != null and beginTime != \"\" '> BeginTime=#{beginTime},</if>" +
+            "<if test='overTime != null and overTime != \"\" '> OverTime=#{overTime},</if>" +
+            "<if test='leaveTime != null and leaveTime != \"\" '> LeaveTime = #{leaveTime},</if>" +
+            "<if test='forCause != null and forCause != \"\" '> ForCause=#{forCause},</if>" +
+            "<if test='leaveType != null and leaveType != \"\" '> LeaveType=#{leaveType},</if>" +
+            "<if test='leaveNumber != null and leaveNumber != \"\" '> LeaveNumber=#{leaveNumber}</if>" +
+            "where Leave_ForId = #{leaveForId}</script>")
     int xxLezveForUpdate1(Leavefor leaveFor);
     /*删除请假*/
     @Delete("delete from leavefor where Leave_ForId = #{leaveForId}")

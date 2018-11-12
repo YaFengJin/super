@@ -8,13 +8,17 @@
 <html>
 <head>
     <title>草稿箱查询,编辑,删除</title>
-    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+
 </head>
 <%--模态框--%>
 <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-theme.min.css">
+<script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
-<script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
+
+
+
 <script type="text/javascript" src="../static/layui/layui.js"></script>
 
 <body>
@@ -34,10 +38,10 @@
     </fieldset>
     <form class="layui-form" action="">
         <input type="hidden" id="lxy">
-        <div class="layui-form-item" hidden>
+        <div class="layui-form-item">
             <label class="layui-form-label">发件人</label>
             <div class="layui-input-block">
-                <input name="b_person" value="${id}" id="bPerson" style="width: 800px" class="layui-input" type="text" autocomplete="off" lay-verify="title">
+                <input name="b_person" id="bPerson" style="width: 800px" class="layui-input" type="text" autocomplete="off" lay-verify="title">
             </div>
         </div>
         <div class="layui-form-item">
@@ -116,29 +120,7 @@
         fall();
         form.on('submit(btn)', function(){
             $.ajax({
-                url:"/email/update",
-                type:"post",
-                data:{
-                    "bPerson":$("#bPerson").val(),
-                    "bRecipients":$("#bRecipients").val(),
-                    "bTheme":$("#bTheme").val(),
-                    "bRank":$("#bRank").val(),
-                    "bTime":$("#bTime").val(),
-                    "bContent":layedit.getContent(editIndex),
-                    "bUrl":$("#bUrl").val(),
-                    "bState":$("#bState").val(),
-                    "bState1":0,
-                    "bStatus":2
-                },
-                dataType:"json",
-                success:function (data) {
-                    alert(data.message);
-                    window.location.reload();
-                }
-            });
-            return false;
-            /*$.ajax({
-                url:"email/updateEmailBody",
+                url:"/email/updateEmailBody",
                 type:"post",
                 data:{
                     "bPerson":$("#bPerson").val(),
@@ -157,7 +139,7 @@
                     window.location.reload();
                 }
             });
-            return false;*/
+            return false;
         });
 
 

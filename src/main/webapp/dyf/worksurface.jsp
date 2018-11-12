@@ -389,6 +389,7 @@
                                 }
                                 form.render('select');
                             }
+                            $("#wj_id").html("");
                             for (var i=0;i<c.length;i++){
                                 if (a.wj_id==c[i].wj_id){
                                     $("#wj_id").append("<option value='"+a.wj_id+"' selected='selected'>"+a.wj_name+"</option>");

@@ -46,4 +46,34 @@ public class UsersurfaceServiceImpl implements UsersurfaceService {
 
     @Override
     public int savetype(EmpType type) {return dao.savetype(type); }
+
+    @Override
+    public int deletetype(int id) { return dao.deletetype(id); }
+
+    @Override
+    public int select2(String name) {
+        return dao.select2(name);
+    }
+
+    @Override
+    public int saveUserPost(int userId,int postId) {
+        return dao.saveUserPost(userId,postId);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPost() {
+        return dao.queryPost();
+    }
+
+    @Override
+    public int queryisHave(int userId) {
+        return dao.queryisHave(userId);
+    }
+
+    @Override
+    public int updateUserPost(int userId, int postId) {
+        return dao.updateUserPost(userId,postId);
+    }
+
+
 }

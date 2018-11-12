@@ -21,14 +21,14 @@
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">发件人</label>
         <div class="layui-input-block">
-            <input name="b_person" value="${name}" style="width: 800px" class="layui-input" type="text" autocomplete="off" lay-verify="title">
-            <input type="text" id="bPerson" value="${id}">
+            <input name="b_person" value="${id}" id="bPerson" style="width: 800px" class="layui-input" type="text" autocomplete="off" lay-verify="title">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">收件人</label>
         <div class="layui-input-block">
-            <input name="b_recipients" id="bRecipients" style="width: 800px" class="layui-input" placeholder="请输入收件人" type="text" autocomplete="off" lay-verify="required">
+            <input name="b_recipients" id="bRecipientsName" style="width: 800px" class="layui-input" placeholder="请输入收件人" type="text" autocomplete="off" lay-verify="required">
+            <input type="text" hidden id="bRecipients" >
         </div>
     </div>
     <div class="layui-form-item">
@@ -40,6 +40,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">级别</label>
         <div class="layui-input-block"  style="width: 200px;">
+            <%--<input name="b_rank" id="bRank" class="layui-input" placeholder="请输入收件人" type="text" autocomplete="off" lay-verify="title">--%>
             <select id="bRank">
                 <option value="一般">一般</option>
                 <option value="重要">重要</option>
@@ -94,16 +95,98 @@
         </div>
     </div>
 </form>
+
+<form class="layui-form" id="treeView" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择部门</label>
+        <div class="layui-input-inline">
+            <div id="LAY-auth-tree-index"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <div class="layui-input-block" id="UserNames">
+
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <button class="layui-btn" type="button" id="saveUser" lay-submit lay-filter="LAY-auth-tree-submit">确定
+            </button>
+        </div>
+    </div>
+</form>
 </body>
 </html>
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
-    layui.use(['form', 'layedit', 'jquery',], function(){
+    layui.config({
+        base: '../static/extends/',
+    }).extend({
+        authtree: 'authtree'
+    });
+    layui.use(['form', 'layedit', 'jquery','authtree'], function(){
         var form = layui.form
             ,layer = layui.layer
             ,layedit = layui.layedit,
             $=layui.jquery;
+        var authtree=layui.authtree;
+        //封装ajax
+        function jQueryajax(url, data, type, dataType, response) {
+            $(function () {
+                $.ajax({
+                    url: url,
+                    type: type,
+                    data: data,
+                    dataType: dataType,
+                    success: function (res) {
+                        response(res);
+                    }
+                });
+            });
+        };
+
+        //点击文本框弹出layer
+        $("#bRecipientsName").click(function () {
+            jQueryajax("/recruit/queryDept", null, "post", "json", function (data) {
+                //生成树形菜单
+                authtree.render('#LAY-auth-tree-index', data, {
+                    autowidth: true,
+                    layfilter: 'lay-check-auth',
+                });
+                var dept=layer.open({
+                    type: 1,//类型
+                    title: '选择部门',//标题
+                    shadeClose: false,//点击遮罩层关闭
+                    offset: 't',
+                    content: $('#treeView') //打开的内容
+                });
+                authtree.on('change(lay-check-auth)', function () {
+                    var a = [];
+                    for (var i = 0; i < authtree.getChecked('#LAY-auth-tree-index').length; i++) {
+                        a[a.length] = authtree.getChecked('#LAY-auth-tree-index')[i];
+                    }
+                    //数组拆分成字符串
+                    var b = a.join(",");
+                    //查询用户
+                    var username="";
+                    var userid="";
+                    jQueryajax("/recruit/queryDeptUserNames", {deptid: b}, "post", "json", function (resp) {
+                        username=resp.names.join(",");
+                        userid=resp.ids.join(",");
+                        $("#UserNames").html(username);
+                        form.render();
+                    });
+                    $("#saveUser").click(function() {
+                        $("#bRecipientsName").val(username);
+                        $("#bRecipients").val(userid);
+                        layer.close(dept);
+                    })
+                });
+            });
+        });
 
         //创建一个编辑器
         var editIndex = layedit.build('LAY_demo_editor');
@@ -141,7 +224,7 @@
         * */
         form.on('submit(demo)', function(){
             $.ajax({
-                url:"/email/saveDrafts",
+                url:"/email/addDrafts",
                 type:"post",
                 data:{
                     "bPerson":$("#bPerson").val(),

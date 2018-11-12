@@ -61,11 +61,19 @@
         <div class="layui-inline">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input endtime" id="test2" placeholder="yyyy-MM-dd">
+                <input type="text" class="layui-input endtime"  id="test2" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">月份统计</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input yftj"  id="test3" placeholder="yyyy-MM">
             </div>
         </div>
         <button class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius tjkq">统计</button>
     </div>
+<div class="layui-form-item">
+</div>
     <div id="tongji" style="display: none;" class="layui-form" >
         <table class="layui-table">
             <colgroup>
@@ -110,6 +118,13 @@
             table = layui.table,
             $ = layui.jquery;
 
+        $(function () {
+            if ("${id}" != 1){
+                $(".bianhao").val("${id}");
+                $(".bianhao").attr("disabled","disabled");
+            }
+        })
+
         var index1 ="";
         laydate.render({
             elem: '#test1',
@@ -118,6 +133,10 @@
         laydate.render({
             elem: '#test2',
             type: 'date'
+        });
+        laydate.render({
+            elem: '#test3',
+            type: 'month'
         });
         //监听头工具栏事件
         table.on('toolbar(bianshan)', function (obj) {
@@ -137,39 +156,49 @@
             };
         });
         $(".tjkq").click(function () {
-            if ($(".bianhao").val()==""){
-                layer.msg('请输入员工编号');
-            } else {
-                $.ajax({
-                    url:"gotime1",
-                    type:"post",
-                    data:{
-                        "userId": $(".bianhao").val(),
-                        "begin":$(".begintime").val(),
-                        "end":$(".endtime").val()
-                    },
-                    dataType:"json",
-                    success:function (all) {
-                        if(all.list.length>0){
-                            $(".tj0").html(all.list[0].userId);$(".tj1").html(all.list[0].checkName);
-                            $(".tj2").html(all.zong);$(".tj3").html($(".begintime").val());
-                            $(".tj4").html($(".endtime").val());$(".tj5").html(all.zhengchang);
-                            $(".tj6").html(all.queqin);$(".tj7").html(all.zaotui);
-                            $(".tj8").html(all.qingjia);
-                            layer.open({
-                                type: 1,//类型
-                                area: ['70%', '20%'],//定义宽和高
-                                title: '编辑',//题目
-                                shadeClose: true,//点击遮罩层关闭
-                                content: $('#tongji') //打开的内容
-                                /*/!*content: 'index.jsp'*///打开的内容 type为2*!/
-                            });
-                        }else{
-                            layer.msg('输入的员工编号不正确');
-                        }
+            if($(".yftj").val()!=null&&$(".yftj").val()!=""){
+                alert("1");
+                fall(${id},$(".yftj").val());
+            }else {
+                alert("2");
+                if ($(".bianhao").val() == "") {
+                    layer.msg('请输入员工编号');
+                } else {
+                    $.ajax({
+                        url: "gotime1",
+                        type: "post",
+                        data: {
+                            "userId": $(".bianhao").val(),
+                            "begin": $(".begintime").val(),
+                            "end": $(".endtime").val(),
+                        },
+                        dataType: "json",
+                        success: function (all) {
+                            if (all.list.length > 0) {
+                                $(".tj0").html(all.list[0].userId);
+                                $(".tj1").html(all.list[0].checkName);
+                                $(".tj2").html(all.zong);
+                                $(".tj3").html($(".begintime").val());
+                                $(".tj4").html($(".endtime").val());
+                                $(".tj5").html(all.zhengchang);
+                                $(".tj6").html(all.queqin);
+                                $(".tj7").html(all.zaotui);
+                                $(".tj8").html(all.qingjia);
+                                layer.open({
+                                    type: 1,//类型
+                                    area: ['70%', '20%'],//定义宽和高
+                                    title: '编辑',//题目
+                                    shadeClose: true,//点击遮罩层关闭
+                                    content: $('#tongji') //打开的内容
+                                    /*/!*content: 'index.jsp'*///打开的内容 type为2*!/
+                                });
+                            } else {
+                                layer.msg('输入的员工编号不正确或此人没有考勤数据');
+                            }
 
-                    }
-                })
+                        }
+                    })
+                }
             }
 
         });
@@ -188,29 +217,30 @@
                 success:function (all) {
                     layer.msg(all.message);
                     layer.close(index1);
-                    fall();
-                    fall();
+                    fall(${id});
+                    fall(${id});
                 }
             })
         });
-        fall();
-        fall();
+        fall(${id});
+        fall(${id});
     })
     //查询数据的分页
-    function fall(kwx) {
+    function fall(kwx,month) {
         var table = layui.table //表格
         //执行渲染
         table.render({
             elem: '#test',//制定原始表格元素选择器（id或者class）
-            /*where: {"schedulingName": kwx},*/
+            where: {"sid": kwx,
+                    "month":month
+            },
             url: 'xxChecksurfaceSelect',
             id: 'weiyi',
-            limits: [1, 3, 7, 10, 50, 100],
+            limits: [1, 3, 7, 10, 50, 100,10000000],
             limit: 10,  //默认为10
             title: '班次表',
             //加载表格内容
             cols: [[//标题栏
-                {field: 'checkId', width: 100, title: '编号', sort: true},
                 {field: 'userId', width: 150, title: '员工编号', sort: true},  //sort：true页面可进行排序操作
                 {field: 'checkName', width: 200, title: '员工姓名'},
                 {field: 'checkTime', width: 200, title: '考勤时间', sort: true},

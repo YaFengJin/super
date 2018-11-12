@@ -91,10 +91,10 @@
                             <td id="zou11"></td>
                             <td style="display: none;"><input type="text" id="zou111"></td>
                             <th>
-                                <button type="button" value="1" id="星期一" class="layui-btn tjbc1 z0"><i
+                                <button type="button" value="1" id="星期一" class="layui-btn layui-btn-xs tjbc1 z0"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="1" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="1" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -104,10 +104,10 @@
                             <td id="zou22"></td>
                             <td style="display: none;"><input type="text" id="zou222"></td>
                             <th>
-                                <button type="button" value="2" id="星期二" class="layui-btn tjbc1 z1"><i
+                                <button type="button" value="2" id="星期二" class="layui-btn layui-btn-xs tjbc1 z1"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="2" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="2" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -117,10 +117,10 @@
                             <td id="zou33"></td>
                             <td style="display: none;"><input type="text" id="zou333"></td>
                             <th>
-                                <button type="button" value="3" id="星期三" class="layui-btn tjbc1 z2"><i
+                                <button type="button" value="3" id="星期三" class="layui-btn layui-btn-xs tjbc1 z2"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="3" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="3" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -130,10 +130,10 @@
                             <td id="zou44"></td>
                             <td style="display: none;"><input type="text" id="zou444"></td>
                             <th>
-                                <button type="button" value="4" id="星期四" class="layui-btn tjbc1 z3"><i
+                                <button type="button" value="4" id="星期四" class="layui-btn layui-btn-xs tjbc1 z3"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="4" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="4" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -143,10 +143,10 @@
                             <td id="zou55"></td>
                             <td style="display: none;"><input type="text" id="zou555"></td>
                             <th>
-                                <button type="button" value="5" id="星期五" class="layui-btn tjbc1 z4"><i
+                                <button type="button" value="5" id="星期五" class="layui-btn layui-btn-xs tjbc1 z4"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="5" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="5" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -156,10 +156,10 @@
                             <td id="zou66"></td>
                             <td style="display: none;"><input type="text" id="zou666"></td>
                             <th>
-                                <button type="button" value="6" id="星期六" class="layui-btn tjbc1 z5"><i
+                                <button type="button" value="6" id="星期六" class="layui-btn layui-btn-xs tjbc1 z5"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="6" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="6" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -169,10 +169,10 @@
                             <td id="zou77"></td>
                             <td style="display: none;"><input type="text" id="zou777"></td>
                             <th>
-                                <button type="button" value="7" id="星期日" class="layui-btn tjbc1 z6"><i
+                                <button type="button" value="7" id="星期日" class="layui-btn layui-btn-xs tjbc1 z6"><i
                                         class="layui-icon"></i>
                                 </button>
-                                <button type="button" value="7" class="layui-btn scbc1"><i class="layui-icon"></i>
+                                <button type="button" value="7" class="layui-btn layui-btn-xs scbc1"><i class="layui-icon"></i>
                                 </button>
                             </th>
                         </tr>
@@ -487,7 +487,7 @@
                 dataType: "json",
                 success: function (data) {
                     alert(data.message);
-                    window.parent.location.reload();
+                    window.location.reload();
                 }
             })
             return false;
@@ -523,16 +523,28 @@
                     var username = "";
                     var userid = "";
                     jQueryajax("/recruit/queryDeptUserNames", {deptid: b}, "post", "json", function (resp) {
-                        username = resp.names.join(",");
-                        userid = resp.ids.join(",");
+                        userid = resp.ids;
+                        for (var i = 0; i < resp.names.length; i++) {
+                            username += "<input type='checkbox' name='user' lay-filter='checkFilter'  value='" + userid[i] + "' title='" + resp.names[i] + "'>";
+                        }
                         $("#UserName").html(username);
                         form.render();
                     });
-                    $("#saveUser").click(function () {
-                        $("#userNames").val(username);
-                        $("#userIds").val(userid);
-                        layer.close(dept);
-                    })
+                    form.on('checkbox(checkFilter)',function (data) {
+                        var name=[];
+                        var id=[];
+                        $("#saveUser").click(function () {
+                            if(data.elem.checked){
+                                $("input:checkbox[name='user']:checked").each(function(i){
+                                    name[i] = $(this).attr('title');
+                                    id[i]=$(this).val();
+                                });
+                                $("#userNames").val(name.join(','));
+                                $("#userIds").val(id.join(','));
+                                layer.close(dept);
+                            }
+                        });
+                    });
                 });
             });
         });

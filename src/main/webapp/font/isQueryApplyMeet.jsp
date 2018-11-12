@@ -310,7 +310,7 @@
         layer.open({
         type:1,//类型
         title:'申请会议',
-        area:['38%','70%'],//定义宽和高
+        area:['60%','70%'],//定义宽和高
         shadeClose:false,//点击遮罩层关闭
         content: $('#motaikunag') //打开的内容
         });

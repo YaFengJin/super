@@ -28,12 +28,12 @@ public class CheckServiceImp implements CheckService {
     /*查询考勤记录*/
     @Override
     @Transactional
-    public List<Checksurface> xxChecksurfaceSelect() throws Throwable {
+    public List<Checksurface> xxChecksurfaceSelect(int sid,String month) throws Throwable {
         DayForWeek dayForWeek = new DayForWeek();
         Map<String, Object> map = new HashMap<String, Object>();
-        int sid=0;int jid=0;
-        List<Checksurface> list1 = dao.xxChecksurfaceSelect(sid,jid);//查询考勤数据
-        List<Checksurface> list11 = dao.xxChecksurfaceSelect1(sid,jid);//查询考勤数据
+        int jid=0;
+        List<Checksurface> list1 = dao.xxChecksurfaceSelect(sid,jid,month);//查询考勤数据
+        List<Checksurface> list11 = dao.xxChecksurfaceSelect1(sid,jid,month);//查询考勤数据
         List<Arrangemanage> list2 = dao.xxArrangemanageselect1();//查询排班
         for (Checksurface a1 : list11) {//循环考勤
             //System.out.println("考勤用户id:"+a1.getDownTimeOne());//考勤用户id
@@ -431,54 +431,79 @@ public class CheckServiceImp implements CheckService {
         for (Schedulingmanage a3 : list) {
             //System.out.println(a3.getTimeLate1());//获取第一次签到时间  after>   before<
             if (a1.getGoTimeOne() == null) {
-                if (a1.getGoTimeOneText()!= "请假"){
+                if (a1.getGoTimeOneText() != "请假" && a1.getGoTimeTwoText()==null){
+                    a1.setGoTimeOneText("缺勤");
+                }else if (!a1.getGoTimeOneText().equals("请假")){
                     a1.setGoTimeOneText("缺勤");
                 }
             } else if (a1.getGoTimeOne().before(a3.getTimeLate1()) && a1.getGoTimeOne().after(a3.getDutyTime1())) {//A<j&&A>k判断考勤时间是在班次时间的开始时间和结束时间之间
-                if (a1.getGoTimeOneText()!= "请假" || a1.getGoTimeTwoText()==null){
+                if (a1.getGoTimeOneText()!= "请假" && a1.getGoTimeTwoText()==null){
                     a1.setGoTimeOneText("正常");
+                }else if (!a1.getGoTimeOneText().equals("请假")){
+                    a1.setGoTimeOneText("正常");;
                 }
             } else {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeTwoText()==null){
+                if (a1.getGoTimeOneText()!= "请假"&&a1.getGoTimeTwoText()==null){
+                    a1.setGoTimeOneText("缺勤");
+                }else if (!a1.getGoTimeOneText().equals("请假")){
                     a1.setGoTimeOneText("缺勤");
                 }
             }
+
             if (a1.getDownTimeOne() == null) {
-                if (!a1.getDownTimeOneText().equals("请假")){
+                if (a1.getDownTimeOneText() != "请假" && a1.getDownTimeOneText()==null){
+                    a1.setDownTimeOneText("缺勤");
+                }else if (!a1.getDownTimeOneText().equals("请假")){
                     a1.setDownTimeOneText("缺勤");
                 }
             } else if (a1.getDownTimeOne().after(a3.getTimeLate2()) && a1.getDownTimeOne().before(a3.getDutyTime2())) {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeTwoText()==null){
+                if (a1.getDownTimeOneText()!= "请假"&&a1.getDownTimeOneText()==null){
+                    a1.setDownTimeOneText("正常");
+                }else if (!a1.getDownTimeOneText().equals("请假")){
                     a1.setDownTimeOneText("正常");
                 }
             } else {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeOne() == null){
+                if (a1.getDownTimeOneText()!= "请假"&&a1.getDownTimeOneText() == null){
+                    a1.setDownTimeOneText("早退");
+                }else if (!a1.getDownTimeOneText().equals("请假")){
                     a1.setDownTimeOneText("早退");
                 }
             }
             if (a1.getGoTimeTwo() == null) {
-                if (!a1.getGoTimeTwoText().equals("请假")) {
+                if (a1.getGoTimeTwoText()!="请假"&&a1.getGoTimeTwoText()==null) {
+                    a1.setGoTimeTwoText("缺勤");
+                }else if (!a1.getGoTimeTwoText().equals("请假")){
                     a1.setGoTimeTwoText("缺勤");
                 }
             } else if (a1.getGoTimeTwo().before(a3.getTimeLate3()) && a1.getGoTimeTwo().after(a3.getDutyTime3())) {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeOne() == null) {
+                if (a1.getGoTimeTwoText()!= "请假"&&a1.getGoTimeTwoText() == null) {
+                    a1.setGoTimeTwoText("正常");
+                }else if (!a1.getGoTimeTwoText().equals("请假")){
                     a1.setGoTimeTwoText("正常");
                 }
             } else {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeOne() == null) {
+                if (a1.getGoTimeTwoText()!= "请假"&&a1.getGoTimeTwoText() == null) {
+                    a1.setGoTimeTwoText("缺勤");
+                }else if (!a1.getGoTimeTwoText().equals("请假")){
                     a1.setGoTimeTwoText("缺勤");
                 }
             }
             if (a1.getDownTimeTwo() == null) {
-                if (!a1.getDownTimeTwoText().equals("请假")) {
+                if (a1.getDownTimeTwoText()!="请假"&&a1.getDownTimeTwoText()==null) {
+                    a1.setDownTimeTwoText("缺勤");
+                }else if(!a1.getDownTimeTwoText().equals("请假")){
                     a1.setDownTimeTwoText("缺勤");
                 }
             } else if (a1.getDownTimeTwo().after(a3.getTimeLate4()) && a1.getDownTimeTwo().before(a3.getDutyTime4())) {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeOne() == null) {
+                if (a1.getDownTimeTwoText()!= "请假"&&a1.getDownTimeTwoText() == null) {
+                    a1.setDownTimeTwoText("正常");
+                }else if (!a1.getDownTimeTwoText().equals("请假")){
                     a1.setDownTimeTwoText("正常");
                 }
             } else {
-                if (a1.getGoTimeOneText()!= "请假"||a1.getGoTimeOne() == null) {
+                if (a1.getDownTimeTwoText()!= "请假"&&a1.getDownTimeTwoText() == null) {
+                    a1.setDownTimeTwoText("早退");
+                }else if (!a1.getDownTimeTwoText().equals("请假")){
                     a1.setDownTimeTwoText("早退");
                 }
             }
@@ -553,7 +578,7 @@ public class CheckServiceImp implements CheckService {
         int qingjia = go14+dow14+go24+dow24;//计算出早退
         int zong = go11+dow11+go12+dow12+go13+dow13+go21+dow21+go22+dow22+go23+dow23;//查询总打卡次数 不打卡无数据
         int jid = 1;//判断执行动态sql语句的条件
-        List<Checksurface> list = dao.xxChecksurfaceSelect(sid,jid);//查询统计人员信息
+        List<Checksurface> list = dao.xxChecksurfaceSelect(sid,jid,null);//查询统计人员信息
         map.put("zhengchang",zhengchang);//计算出正常
         map.put("queqin",queqin);//计算出缺勤
         map.put("zaotui",zaotui);//计算出早退

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface CheckService {
     /*查询考勤记录*/
-    List<Checksurface> xxChecksurfaceSelect() throws Throwable;
+    List<Checksurface> xxChecksurfaceSelect(int sid, String month) throws Throwable;
     /*统计考勤记录*/
     Map gotime1(Integer userId, int sid, String begin, String end);
     /*导入添加考勤*/

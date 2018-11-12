@@ -25,7 +25,7 @@ public interface ApplyMeetService {
      * @param UserId
      * @return
      */
-    List<Map<String,Object>> isQueryWaitMeet(String meetRoom, String UserId);
+    List<Map<String,Object>> isQueryWaitMeet(String meetRoom);
 
     /**
      * 取消申请会议

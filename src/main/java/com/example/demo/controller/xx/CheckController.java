@@ -1,7 +1,9 @@
 package com.example.demo.controller.xx;
 
+import com.example.demo.entity.Arrangemanage;
 import com.example.demo.entity.Checksurface;
 import com.example.demo.service.xx.CheckService;
+import com.example.demo.service.xx.XxService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -31,13 +33,17 @@ public class CheckController {
     @Autowired
     private CheckService service;
 
+    @Autowired
+    private XxService xxService;
+
     /*查询考勤*/
     @RequestMapping("/xxChecksurfaceSelect")
-    public Map xxChecksurfaceSelect(@RequestParam(required=false,defaultValue="1") int page,
+    public Map xxChecksurfaceSelect(int sid,String month,
+                                    @RequestParam(required=false,defaultValue="1") int page,
                                     @RequestParam(required=false,defaultValue="10") int limit) throws Throwable {
         Map<String,Object> map = new HashMap<String, Object>();
         Page<Map<String,Object>> pages = PageHelper.startPage(page,limit);
-        List datas = service.xxChecksurfaceSelect();
+        List datas = service.xxChecksurfaceSelect(sid,month);
         map.put("code",0);
         map.put("msg","");
         map.put("count",pages.getTotal());
@@ -84,15 +90,17 @@ public class CheckController {
             return map;
         }
         try {
-            HSSFWorkbook workbook = new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
-            //有多少个sheet
+            List<Arrangemanage> all = xxService.xxArrangemanageselect1();//查询启用的排班
+            if (all.size()>0) {
+                HSSFWorkbook workbook = new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+                //有多少个sheet
                 int sheets = workbook.getNumberOfSheets();
                 HSSFSheet sheet = workbook.getSheetAt(0);
                 //获取多少行
                 int rows = sheet.getPhysicalNumberOfRows();
                 Checksurface answer = null;
                 //遍历每一行，注意：第 0 行为标题
-                for (int j = 1; j < rows+1; j++) {
+                for (int j = 1; j < rows + 1; j++) {
                     Checksurface checksurface = new Checksurface();
                     //获得第 j 行
                     HSSFRow row = sheet.getRow(j);
@@ -111,16 +119,16 @@ public class CheckController {
                     String checkTime = row.getCell(3).getStringCellValue();
                     String checkRemark = row.getCell(4).getStringCellValue();
                     String checkNumber = row.getCell(5).getStringCellValue();
-                    String  goTimeOne = row.getCell(6).getStringCellValue();
-                    String  downTimeOne = row.getCell(7).getStringCellValue();
-                    String  goTimeTwo = row.getCell(8).getStringCellValue();
-                    String  downTimeTwo = row.getCell(9).getStringCellValue();
+                    String goTimeOne = row.getCell(6).getStringCellValue();
+                    String downTimeOne = row.getCell(7).getStringCellValue();
+                    String goTimeTwo = row.getCell(8).getStringCellValue();
+                    String downTimeTwo = row.getCell(9).getStringCellValue();
                     System.out.println(goTimeTwo);
 
-                    SimpleDateFormat simpleDateFormat =(SimpleDateFormat) DateFormat.getDateInstance();
+                    SimpleDateFormat simpleDateFormat = (SimpleDateFormat) DateFormat.getDateInstance();
 
                     simpleDateFormat.applyPattern("yyyy-MM-dd");
-                    Date checkTime1 =new Date(simpleDateFormat.parse(checkTime).getTime());
+                    Date checkTime1 = new Date(simpleDateFormat.parse(checkTime).getTime());
 
                     simpleDateFormat.applyPattern("HH:mm:ss");
                     Time goTimeOne1 = new Time(simpleDateFormat.parse(goTimeOne).getTime());
@@ -140,8 +148,9 @@ public class CheckController {
                     checksurface.setDownTimeTwo(downTimeTwo1);
                     a = service.xxChecksurfaceInsert(checksurface);
                 }
-
-
+            }else {
+                a = -1;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -149,6 +158,8 @@ public class CheckController {
         }
         if (a>0){
             map.put("message","添加成功");
+        }else if (a==-1){
+            map.put("message","请填写排班");
         }else {
             map.put("message","添加失败");
         }

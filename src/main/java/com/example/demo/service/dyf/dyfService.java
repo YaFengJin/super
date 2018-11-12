@@ -40,8 +40,8 @@ public interface dyfService {
     List<Map> queryworksurface(int work_id);
     int saveApply(int wj_id, int b_id, int sort_id, int work_id, Double apply_price, int apply_number, String useid, String UserId, String apply_comment, int apply_state, String apply_date);
 
-    List<Map> queryApply(int page, int limit);
-    int countApply();
+    List<Map> queryApply(int page, int limit, int UserId);
+    int countApply(int UserId);
     int deleteApply(int apply_id);
     List<Map> queryApplyup(int apply_id);
     int updateApply(int apply_id, int wj_id, int b_id, int sort_id, Double apply_price, int apply_number, String apply_comment, String apply_date);
@@ -90,5 +90,6 @@ public interface dyfService {
     int updateLeaveApply(LeaveApply la);
     List<Map> queryapplyjl(int UserId);
     int updateleaveapplyleavego(String spyj, int Leave_AppLyId);
-    int LeaveApplyshtg(int Leave_AppLyId, int UserId);
+    int LeaveApplyshtg(int Leave_AppLyId, int UserId, String time);
+    int queryApply2(int UserId);
 }

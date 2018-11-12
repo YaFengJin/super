@@ -60,7 +60,7 @@
                         <dd><a lay-href="set/info.html">基本资料</a></dd>
                         <dd><a lay-href="set/password.html">修改密码</a></dd>
                         <hr>
-                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                        <dd id="logout" style="text-align: center;"><a>退出</a></dd>
                     </dl>
                 </li>
 
@@ -111,7 +111,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="recruit/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe src="404.jsp" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
         <!-- 辅助元素，一般用于移动设备下遮罩 -->
@@ -130,6 +130,17 @@
     layui.use(["jquery"], function () {
         var $ = jQuery = layui.$;
         var html = '';
+        $("#logout").click(function () {
+            $.ajax({
+                url:"logout",
+                dataType:"text",
+                success:function (data) {
+                    if(data=="success"){
+                        window.location.href="/user/login.jsp";
+                    }
+                }
+            });
+        })
         $.ajax({
             url: 'queryUser',
             type: 'post',

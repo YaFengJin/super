@@ -12,17 +12,19 @@ public interface EmailService {
     * 添加邮件表并且实现记录表增加
     * */
     public int saveEmail(EmailBody e, String userId);
-
-
+    /*
+     * 更新草稿箱及添加
+     * */
+    public int updateEmailBody(EmailBody er, String userId);
+    /*
+    * 添加草稿箱
+    * */
+    public int addDrafts(EmailBody er);
 
     /*
     * 查询草稿箱
     * */
     public List<Map<String,Object>> findEmailBody(String bPerson);
-    /*
-    * 更新草稿箱
-    * */
-    public int updateEmailBody(EmailBody er);
     /*
     * 删除草稿箱
     * */

@@ -36,6 +36,7 @@ public class LeaceForServiceImp implements LeaceForService {
 
     @Override
     public int xxLezveForUpdate(Leavefor leaveFor,String name) {
+        System.out.println("ssssss:"+name);
         if(name.equals("批准")) {
             leaveFor.setLeaveState("已审核");
         }else if(name.equals("销假")){

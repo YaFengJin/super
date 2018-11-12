@@ -124,8 +124,8 @@
     {{#  if(d.apply_state == 3){ }}
     <button class="layui-btn layui-btn-normal" lay-Event="gh">归还</button>
     {{#  } }}
-    {{#  if(d.apply_state == 4){ }}
-
+    {{#  if(d.apply_state == 4 || d.apply_state == 5 || d.apply_state == 6){ }}
+    <button class="layui-btn layui-btn-normal" lay-Event="ck">查看</button>
     {{#  } }}
 </script>
 
@@ -141,9 +141,10 @@
     });
     function addData(){
         var table = layui.table;
+        var UserId = ${id};
         table.render({
             elem: '#test'
-            ,url:'/showApply'
+            ,url:'/showApply?UserId='+UserId
             ,limit:3 //默认为10
             ,page: true
             ,cols: [[

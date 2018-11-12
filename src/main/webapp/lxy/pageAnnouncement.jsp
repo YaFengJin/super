@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*,java.text.*" pageEncoding="UTF-8"%>
-
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -16,7 +15,6 @@
 <script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
-<script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../static/layui/layui.js"></script>
 
 <body>
@@ -370,7 +368,7 @@
     * */
     $(function () {
         $.ajax({
-            url:"announcement/findAnnouncementtype",
+            url:"/announcement/findAnnouncementtype",
             type:"post",
             dataType:"json",
             success:function(data) {
@@ -405,7 +403,7 @@
             var AM_Tove=$("#amTove").val();
             var AM_Content=$("#amContent").val();
             $.ajax({
-                url:"announcement/saveAnnouncement",
+                url:"/announcement/saveAnnouncement",
                 type:"post",
                 data:{
                     "amState":AM_State,

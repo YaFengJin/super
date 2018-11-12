@@ -27,6 +27,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int select(String name) {
+        return dao.select(name);
+    }
+
+    @Override
+    public int update(String name, String password) {
+        return dao.update(name,password);
+    }
+
+    @Override
     public Usersurface findByUser(String name) {
         return dao.findByUser(name);
     }

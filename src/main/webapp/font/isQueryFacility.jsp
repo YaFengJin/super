@@ -86,11 +86,11 @@
         cols: [[//标题栏
         {type: 'checkbox', fixed: 'left'},
         {field: 'f_id', width: 100, title: '设备id'}, //sort：true页面可进行排序操作
-        {field: 'f_number', width: 300, title: '设备编号'},
-        {field: 'f_name', width: 300, title: '设备名称', sort: true},
-        {field: 'm_name', width: 300, title: '所属会议室',sort: true},
-        {field: 'f_state', width: 300, title: '设备状态',sort: true},
-        {field: 'f_describe', width: 300, title: '设备描述', sort: true},
+        {field: 'f_number', width: 150, title: '设备编号'},
+        {field: 'f_name', width: 150, title: '设备名称', sort: true},
+        {field: 'm_name', width: 150, title: '所属会议室',sort: true},
+        {field: 'f_state', width: 150, title: '设备状态',sort: true},
+        {field: 'f_describe', width:150, title: '设备描述', sort: true},
         {fixed: 'right', width: 200, align:'center',title: '操作', toolbar: '#barDemo'}
         ]],
         page: true,//是否显示分页

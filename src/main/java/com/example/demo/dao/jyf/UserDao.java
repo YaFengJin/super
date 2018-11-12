@@ -14,7 +14,14 @@ public interface UserDao {
     @Select("select u.UserName as name,u.UserId as id" +
             " from usersurface as u " +
             " where u.UserAccount=#{name} and u.UserPassword=#{password}")
-    List<Map<String,Object>>userLogin(@Param("name") String name,@Param("password") String password);
+    List<Map<String,Object>>userLogin(@Param("name") String name, @Param("password") String password);
+    //查询
+    @Select("select count(*) from usersurface as u where u.UserAccount=#{name}")
+    int select(@Param("name") String name);
+    //更新
+    @Update("update usersurface set UserPassword=#{password} where UserAccount=#{name}")
+    int update(@Param("name") String name, @Param("password") String password);
+
     //根据用户名字查询密码
     @Select("select u.UserId,u.UserAccount,u.UserPassword,u.UserName " +
             "from usersurface as u " +
@@ -34,7 +41,7 @@ public interface UserDao {
             "</if>" +
             "and p.DeptId=d.DeptId" +
             "</script>")
-     List<Map<String,Object>>queryRole(@Param("postName")String postName);
+     List<Map<String,Object>>queryRole(@Param("postName") String postName);
 
     //查询部门
     @Select("select d.DeptId as id,d.DeptName as name from dept as d")
@@ -46,7 +53,7 @@ public interface UserDao {
 
     //删除角色
     @Delete("delete from post where PostId=#{id}")
-     int deleteRole(@Param("id")int id);
+     int deleteRole(@Param("id") int id);
 
     //更新角色
     @Update("<script>" +
@@ -79,7 +86,7 @@ public interface UserDao {
             "(#{item.menu.menuid},#{item.post.postid})" +
             " </foreach>" +
             "</script>")
-     int insertPostMenu(List<Post_Menu>list);
+     int insertPostMenu(List<Post_Menu> list);
 
 
 }

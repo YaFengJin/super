@@ -25,6 +25,8 @@
         <tr>
             <td>请填写拒绝理由:</td>
             <td><input type="text" id="text"></td>
+            <td><input type="text" id="usid"></td>
+            <td><input type="text" id="name"></td>
         </tr>
         <tr style="text-align:center">
             <td colspan="2">
@@ -55,6 +57,23 @@
             laydate = layui.laydate,
             layer = layui.layer,
             $ = layui.jquery;
+
+        $("#button").click(function(){
+            $.ajax({
+                url: "xxLezveForUpdate",
+                type: "post",
+                data: {
+                    "gender": $("#text").val(),
+                    "name": $("#name").val(),
+                    "leaveForId": $("#usid").val() //执行修改
+                },
+                dataType: "json",
+                success: function (data) {
+                    alert(data.message);
+                    window.location.reload();
+                }
+            })
+        })
         fall(${id});
     })
     //查询数据的分页
@@ -78,7 +97,7 @@
                 {field: 'OverTime', width: 180, title: '结束日期', sort: true},
                 {field: 'LeaveNumber', width: 180, title: '时长(天)', sort: true},
                 {field: 'ForCause', width: 180, title: '缘由', sort: true},
-                {fixed: 'right', width: 200, align: 'center', toolbar: '#barDemo'}
+                {fixed: 'right', width: 160, align: 'center', toolbar: '#barDemo'}
             ]],
             page: true,//是否显示分页
             toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -113,27 +132,16 @@
                         }
                     })
             }else if (layEvent === 'bpz') {
+                $("#usid").val(data.Leave_ForId);
+                $("#name").val($(this).html());
                 layer.open({
                     type: 1,//类型
-                    area: ['40%', '70%'],//定义宽和高
+                    area: ['60%', '30%'],//定义宽和高
                     title: '意见',//题目
                     shadeClose: false,//点击遮罩层关闭
-                    content: $('#motaikunag') //打开的内容
+                    content: $('#motaikunag1') //打开的内容
                 });
-                /*$.ajax({
-                    url: "xxLezveForUpdate",
-                    type: "post",
-                    data: {
-                        "leaveForId": data.Leave_ForId,
-                        "name": $(this).html()
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        alert(data.message);
-                        table.reload(['weiyi'], function () {
-                        })
-                    }
-                })*/
+
             }else if (layEvent === 'dxj') {
                 $.ajax({
                     url: "xxLezveForUpdate",

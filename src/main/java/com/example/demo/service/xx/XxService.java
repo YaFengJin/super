@@ -30,5 +30,7 @@ public interface XxService {
     int xxArrangemanagedelete(Arrangemanage a);
     /*编辑排班*/
     int xxArrangemanageupdate1(Arrangemanage a);
+    /*查询启用排班*/
+    List<Arrangemanage> xxArrangemanageselect1();
 
 }

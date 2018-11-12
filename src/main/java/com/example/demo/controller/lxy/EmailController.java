@@ -17,9 +17,6 @@ public class EmailController {
     @Resource
     private EmailService service;
 
-
-
-
     /*
     * 邮件增加
     * 及记录表增加
@@ -36,6 +33,37 @@ public class EmailController {
         return map1;
     }
     /*
+     * 更新草稿箱及添加
+     * */
+    @RequestMapping("/updateEmailBody")
+    public Map<String,Object> updateEmailBody(EmailBody er, String bRecipients){
+        Map<String,Object>map=new HashMap<String,Object>();
+        int a=service.updateEmailBody(er,bRecipients);
+        if(a==1){
+            map.put("message","执行成功");
+        }else{
+            map.put("message","执行失败");
+        }
+        return map;
+    }
+
+
+    /*
+    * 增加草稿箱
+    * */
+    @RequestMapping("/addDrafts")
+    public Map<String,Object> addDrafts(EmailBody er){
+        Map<String,Object>map=new HashMap<String, Object>();
+        int a=service.addDrafts(er);
+        if(a>0){
+            map.put("message","执行成功");
+        }else{
+            map.put("message","执行失败");
+        }
+        return map;
+    }
+
+    /*
     * 查询草稿箱
     * */
     @RequestMapping("/findEmailBody")
@@ -44,20 +72,6 @@ public class EmailController {
         map.put("code",0);
         map.put("msg","");
         map.put("data",service.findEmailBody(bPerson));
-        return map;
-    }
-    /*
-    * 更新草稿箱
-    * */
-    @RequestMapping("/updateEmailBody")
-    public Map<String,Object> updateEmailBody(EmailBody er){
-        Map<String,Object>map=new HashMap<String, Object>();
-        int a=service.updateEmailBody(er);
-        if(a>0){
-            map.put("message","执行成功");
-        }else{
-            map.put("message","执行失败");
-        }
         return map;
     }
     /*

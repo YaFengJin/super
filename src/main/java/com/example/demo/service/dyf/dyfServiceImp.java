@@ -150,14 +150,14 @@ public class dyfServiceImp implements dyfService{
     }
 
     @Override
-    public List<Map> queryApply(int page, int limit) {
+    public List<Map> queryApply(int page, int limit,int UserId) {
         page=(page-1)*limit;
-        return dao.queryApply(page,limit);
+        return dao.queryApply(page,limit,UserId);
     }
 
     @Override
-    public int countApply() {
-        return dao.countApply();
+    public int countApply(int UserId) {
+        return dao.countApply(UserId);
     }
 
     @Override
@@ -449,8 +449,8 @@ public class dyfServiceImp implements dyfService{
 
     @Override
     @Transactional
-    public int LeaveApplyshtg(int Leave_AppLyId, int UserId) {
-        int a = dao.updateleaveapplytg1(Leave_AppLyId);
+    public int LeaveApplyshtg(int Leave_AppLyId, int UserId,String time) {
+        int a = dao.updateleaveapplytg1(Leave_AppLyId,time);
         int b = dao.updateleaveapplytg2(UserId);
         int result = 0;
         if(a>0&&b>0){
@@ -459,6 +459,11 @@ public class dyfServiceImp implements dyfService{
             result=0;
         }
         return result;
+    }
+
+    @Override
+    public int queryApply2(int UserId) {
+        return dao.queryApply2(UserId);
     }
 
 

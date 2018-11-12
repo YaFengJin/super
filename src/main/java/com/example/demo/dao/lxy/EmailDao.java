@@ -16,7 +16,7 @@ public interface EmailDao {
             "values(#{bPerson},#{bRecipients},#{bTheme},#{bRank},#{bTime},#{bContent},#{bUrl},#{bState},#{bState1},#{bStatus})")
     public int saveEmailBody(EmailBody er);
     /*
-    * 查询b_id
+    * 查询添加成功后的最大b_id
     * */
     @Select("select max(b_id) as b_id from email_body")
     public int selectEmail();
@@ -32,16 +32,24 @@ public interface EmailDao {
             "</script>")
     public int saveEmailRecord(List<EmailRecord> list);
 
-
-
     /*
-     * 更新草稿箱
+     * 更新草稿箱及添加
      * 根据邮件ID更新
      * */
     @Update("update email_body set " +
             "b_recipients=#{bRecipients},b_theme=#{bTheme},b_rank=#{bRank},b_time=#{bTime}," +
             "b_content=#{bContent},b_url=#{bUrl},b_state=#{bState} where b_id=#{bId}")
     public int updateEmailBody(EmailBody er);
+
+
+
+    /*
+     * 添加草稿箱
+     * */
+    @Insert("insert into email_body(b_person,b_recipients,b_theme,b_rank,b_time,b_content,b_url,b_state,b_state1,b_status)" +
+            "values(#{bPerson},#{bRecipients},#{bTheme},#{bRank},#{bTime},#{bContent},#{bUrl},#{bState},#{bState1},#{bStatus})")
+    public int addDrafts(EmailBody er);
+
     /*
     * 查询草稿箱
     * 根据发布人和状态查询

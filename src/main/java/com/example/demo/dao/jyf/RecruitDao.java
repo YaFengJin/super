@@ -97,8 +97,8 @@ public interface RecruitDao {
     @Select("<script>" +
             "select " +
             "u.UserId as id" +
-            " from dept d ,usersurface u " +
-            "where d.DeptId=u.DeptId and d.DeptId in" +
+            " from emp_record as e,dept d ,usersurface u " +
+            "where d.DeptId=u.DeptId and u.UserId=e.UserId and  e.Emp_StateId=1 and d.DeptId in" +
             "(" +
             "<foreach collection='list' item='item'  separator=','>" +
             " #{item.deptid}" +
@@ -110,8 +110,8 @@ public interface RecruitDao {
     @Select("<script>" +
             "select " +
             "u.UserName as name" +
-            " from dept d ,usersurface u " +
-            "where d.DeptId=u.DeptId and d.DeptId in" +
+            " from  emp_record as e,dept d ,usersurface u " +
+            "where d.DeptId=u.DeptId and u.UserId=e.UserId and  e.Emp_StateId=1 and d.DeptId in" +
             "(" +
             "<foreach collection='list' item='item'  separator=','>" +
             " #{item.deptid}" +

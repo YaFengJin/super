@@ -15,32 +15,31 @@
 <table class="layui-hide" id="demo" lay-filter="demo"></table>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">分配角色</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
-
 
 
 <form class="layui-form" id="form" style="display: none" >
     <div class="layui-form-item">
         <label class="layui-form-label">用户账号</label>
         <div class="layui-input-block">
-            <input type="hidden" name="userId" id="userId">
-            <input name="useraccount" class="layui-input" id="userAccount" type="text"  placeholder="请输入用户账号" autocomplete="off" lay-verify="title">
+            <input type="hidden" name="userid" id="userId">
+            <input name="useraccount" class="layui-input" id="userAccount" lay-verify="required" type="text"  placeholder="请输入用户账号" autocomplete="off" lay-verify="title">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">密码框</label>
         <div class="layui-input-block">
-            <input name="userpassword" class="layui-input" id="password" type="password" placeholder="请输入密码" autocomplete="off">
+            <input name="userpassword" class="layui-input" id="password" lay-verify="required" type="password" placeholder="请输入密码" autocomplete="off">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">选择框</label>
         <div class="layui-input-block">
-            <select name="dept.deptid" id="deptname" lay-filter="aihao">
+            <select name="dept.deptid" id="deptname" lay-verify="required" lay-filter="aihao">
 
             </select>
         </div>
@@ -56,26 +55,26 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户账号</label>
         <div class="layui-input-block">
-            <input name="useraccount" class="layui-input"  type="text"  placeholder="请输入用户账号" autocomplete="off" lay-verify="title">
+            <input name="useraccount" class="layui-input"  type="text" lay-verify="required"  placeholder="请输入用户账号" id="tianjia" autocomplete="off" lay-verify="title">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">密码框</label>
         <div class="layui-input-block">
-            <input name="userpassword" class="layui-input"  type="password" placeholder="请输入密码" autocomplete="off">
+            <input name="userpassword" class="layui-input" lay-verify="required"  type="password" placeholder="请输入密码" autocomplete="off">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
-            <input name="username" class="layui-input"  type="text" placeholder="请输入姓名" autocomplete="off">
+            <input name="username" class="layui-input" lay-verify="required"  type="text" placeholder="请输入姓名" autocomplete="off">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">选择框</label>
         <div class="layui-input-block">
-            <select name="dept.deptid" id="user" lay-filter="aihao">
+            <select name="dept.deptid" id="user" lay-verify="required" lay-filter="aihao">
 
             </select>
         </div>
@@ -86,6 +85,9 @@
         </div>
     </div>
 </form>
+<form id="radioPost" class="layui-form" style="display: none">
+
+</form>
 <script type="text/javascript" src="../static/layui/layui.js"></script>
 <script type="text/javascript">
  layui.use(['table','form','layer'],function () {
@@ -93,14 +95,15 @@
      var form=layui.form;
      var layer=layui.layer;
      var $=layui.$;
+
      //渲染表格
      table.render({
          elem:"#demo",
          url:"queryUser",
          id:"demo",
          title:"用户数据",
-         limit:1,
-         limits:[1,3,5,7],
+         limit:3,
+         limits:[3,5,7,9],
          page: true, //开启分页
          toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
          cols: [[ //表头
@@ -108,8 +111,9 @@
              ,{field: 'id', title: 'ID', fixed: 'left'}
              ,{field: 'name', title: '用户名' }
              ,{field: 'account', title: '用户账号' }
-             ,{field: 'password', title: '密码'}
+             ,{field: 'password',hide:'true', title: '密码'}
              ,{field: 'deptname', title: '所属部门'}
+             ,{field: 'postid',hide:'true'}
              ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
          ]]
      });
@@ -126,6 +130,31 @@
                          ,shadeClose: false//点击遮罩层关闭
                          ,content: $("#saveUser")
                      });
+                    $("#tianjia").blur(function () {
+
+                        $.ajax(
+                            {
+                            url:"select2",
+                            type:"post",
+                            data:{
+                                name:$("#tianjia").val()
+                            },
+                                dataType:"json",
+                                success:function (data) {
+                                    if (data==1){
+                                       alert("用户已存在");
+                                        $("#tianjia").val("");
+                                    }else if($("#tianjia").val()==""){
+                                        alert("用户名不可以为空");
+                                    }else {
+                                        alert("用户可以使用");
+                                    }
+
+
+                                }
+                            }
+                        )
+                    });
                  break;
          };
      });
@@ -135,7 +164,59 @@
          var data = obj.data //获得当前行数据
              ,layEvent = obj.event; //获得 lay-event 对应的值
          if(layEvent === 'detail'){
-             layer.msg('查看操作');
+             var id=data.id;
+                 $.ajax({
+                     url:"queryPost",
+                     type:"post",
+                     dataType:"json",
+                     success:function (response) {
+                         var a="";
+                         for(var i=0;i<response.length;i++){
+                             a+="<div class='layui-form-item'>" +
+                                 " <div class='layui-input-block'>" +
+                                 "      <input type='radio' lay-filter='Postfilter' name='postId' value='"+response[i].id+"' title='"+response[i].name+"'>" +
+                                 " </div>" +
+                                 "</div>"
+                         }
+                         a+="<div class='layui-form-item'>" +
+                             " <div class='layui-input-block'>" +
+                             "   <button class='layui-btn' lay-filter='UserPostId' type='button' id='postUser'  lay-submit=''>立即提交</button>"+
+                             " </div>" +
+                             "</div>";
+                         $("#radioPost").html(a);
+                         form.render();
+                     }
+                 });
+            var Post=layer.open({
+                 type: 1 //此处以iframe举例
+                 ,title: '分配角色'
+                 ,area: ['30%', '60%']
+                 ,shadeClose: false//点击遮罩层关闭
+                 ,content: $("#radioPost")
+             });
+
+                     form.on('radio(Postfilter)',function (data) {
+                         form.on('submit(UserPostId)',function () {
+                         $.ajax({
+                             url:"saveUserPost",
+                             type:"post",
+                             data:{
+                                 userId:id,
+                                 postId:data.value
+                             },
+                             dataType:"json",
+                             success:function (dataCheck) {
+                                   if(dataCheck==1){
+                                     alert("分配成功");
+                                     layer.close(Post);
+                                   }else {
+                                       alert("分配失败");
+                                       layer.close(Post);
+                                   }
+                             }
+                         });
+                     });
+                 })
          } else if(layEvent === 'del'){
              layer.confirm('确定要删除吗?', function(index){
                  $.ajax({
@@ -221,9 +302,8 @@
                   form.render();
               }
           });
-     })
-
- })
+     });
+ });
 </script>
 </body>
 </html>

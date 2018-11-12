@@ -1,5 +1,6 @@
 package com.example.demo.service.xx;
 
+import com.example.demo.dao.xx.CheckDao;
 import com.example.demo.dao.xx.XxDao;
 import com.example.demo.entity.Arrangemanage;
 import com.example.demo.entity.Schedulingmanage;
@@ -14,6 +15,9 @@ public class XxServiceImp implements XxService {
 
     @Autowired
     private XxDao xdao;
+
+    @Autowired
+    private CheckDao checkDao;
 
     /*班次分页模糊条件查询*/
     public List<Map<String,Object>> select(int page, int limit, String schedulingName){
@@ -36,13 +40,14 @@ public class XxServiceImp implements XxService {
     }
 
     /**
-     * 查询班次
+     * 查询排班
      * @return
      */
     @Override
     public List<Map<String, Object>> xxArrangemanageselect() {
         return xdao.xxArrangemanageselect();
     }
+
     /**
      * 根据id查询班次
      * @return
@@ -80,6 +85,11 @@ public class XxServiceImp implements XxService {
     @Override
     public int xxArrangemanageupdate1(Arrangemanage a) {
         return xdao.xxArrangemanageupdate1(a);
+    }
+    /*查询启用排班*/
+    @Override
+    public List<Arrangemanage> xxArrangemanageselect1() {
+        return checkDao.xxArrangemanageselect1();
     }
 
 

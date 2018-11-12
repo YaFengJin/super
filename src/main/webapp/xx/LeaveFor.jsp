@@ -102,6 +102,7 @@
         {{#  } else if(d.LeaveState == '已销假'){ }}
         <a class="layui-btn layui-btn-xs qiyong" lay-event="ckxj">查看</a>
         {{#  } else if(d.LeaveState == '请求销假'){ }}
+
         {{#  } else if(d.LeaveState == '不批准'){ }}
         <a class="layui-btn layui-btn-xs qiyong" lay-event="ckxj">查看</a>
         {{#  } }}
@@ -149,7 +150,7 @@
             })
             return false;
         })
-        fall(1);//登陆人id
+        fall(${id});//登陆人id
     })
     //查询数据的分页
     function fall(kwx) {
@@ -175,7 +176,7 @@
                 {field: 'OverTime', width: 180, title: '结束日期', sort: true},
                 {field: 'LeaveNumber', width: 180, title: '请假天数', sort: true},
                 {field: 'LeaveState', width: 180, title: '状态', sort: true},
-                {fixed: 'right', width: 200, align: 'center', toolbar: '#barDemo'}
+                {fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'}
             ]],
             page: true,//是否显示分页
             toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档

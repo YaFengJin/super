@@ -34,9 +34,9 @@ public interface ApplyMeet {
             "<if test='meetRoom!=null and meetRoom!=\"\"'>" +
             " and o.order_name like concat('%',#{meetRoom},'%') " +
             "</if>" +
-            " and o.m_id=m.m_id and u.UserId=o.order_user and o.order_state=0  and u.UserId=#{UserId}" +
+            " and o.m_id=m.m_id and u.UserId=o.order_user and o.order_state=0 " +
             "</script>")
-    List<Map<String,Object>> isQueryWaitMeet(@Param("meetRoom") String meetRoom, @Param("UserId") String UserId);
+    List<Map<String,Object>> isQueryWaitMeet(@Param("meetRoom") String meetRoom);
     /**
      * 取消申请会议
      * @param o
@@ -68,7 +68,7 @@ public interface ApplyMeet {
     @Select("select COUNT(*) from ordermeeting  where\n" +
             "((date_format(order_startdate ,'%Y-%m-%d')>=#{startdates} AND date_format(order_startdate ,'%Y-%m-%d' ) <= #{enddates} AND date_format(order_startdate ,'%H:%i:%s' )>=#{starttimes} AND date_format(order_startdate ,'%H:%i:%s' )<=#{endtimes}) OR \n" +
             "(date_format(order_startdate ,'%Y-%m-%d')<=#{startdates} AND date_format(order_enddate ,'%Y-%m-%d' ) >= #{enddates} AND date_format(order_startdate ,'%H:%i:%s' )<=#{starttimes} AND date_format(order_enddate ,'%H:%i:%s' )>=#{endtimes}) OR\n" +
-            "(date_format(order_enddate ,'%Y-%m-%d')>=#{startdates} AND date_format(order_enddate ,'%Y-%m-%d') <= #{enddates} AND date_format(order_enddate ,'%H:%i:%s' )>=#{starttimes} AND date_format(order_enddate ,'%H:%i:%s' )<=#{endtimes})) and m_id=#{mId} and  order_state=0")
+            "(date_format(order_enddate ,'%Y-%m-%d')>=#{startdates} AND date_format(order_enddate ,'%Y-%m-%d') <= #{enddates} AND date_format(order_enddate ,'%H:%i:%s' )>=#{starttimes} AND date_format(order_enddate ,'%H:%i:%s' )<=#{endtimes})) and m_id=#{mId} and  (order_state=0 or order_state=1)")
     int isQueryDate(@Param("startdates") String startdates, @Param("enddates") String enddates, @Param("starttimes") String starttimes, @Param("endtimes") String endtimes, @Param("mId") String mId);
     /**
      * 查询未通过的会议
@@ -91,11 +91,11 @@ public interface ApplyMeet {
     @Select("select date_sub(#{orderStart},interval #{Houses} hour)")
     String isQueryDatetime(@Param("Houses") String Houses, @Param("orderStart") String orderStart);
     /**
-     * 发送邮件
+     * 审批通过 发送邮件
      */
     @Insert("insert into email_body(b_person,b_recipients,b_theme,b_content,b_time,b_state,b_state1,b_status) " +
             "SELECT order_user,userid,\"会议申请\",concat(\"通知您于\",order_startdate,\"至\",order_enddate,\"到\",(select m_name FROM meet where meet.m_id=ordermeeting.m_id),\"参加会议\"),order_mintes,0,0,2 " +
-            "FROM ordermeeting WHERE order_mintes!=\"\" and now()=order_mintes")
+            "FROM ordermeeting WHERE order_mintes!=\"\" and date_format(now() ,'%Y-%m-%d %H:%i')=date_format(order_mintes ,'%Y-%m-%d %H:%i') and order_state=1")
     int isInsertEmail();
     /**
      * 查询b_id

@@ -40,12 +40,11 @@ public class ApplyMeetServiceImp implements ApplyMeetService {
     /**
      * 查询待批会议
      * @param meetRoom
-     * @param UserId
      * @return
      */
     @Override
-    public List<Map<String, Object>> isQueryWaitMeet(String meetRoom,String UserId) {
-        return applyMeet.isQueryWaitMeet(meetRoom,UserId);
+    public List<Map<String, Object>> isQueryWaitMeet(String meetRoom) {
+        return applyMeet.isQueryWaitMeet(meetRoom);
     }
 
     /**
@@ -109,7 +108,7 @@ public class ApplyMeetServiceImp implements ApplyMeetService {
      */
    @Override
    @Transactional
-   @Scheduled(fixedRate = 1000)
+   @Scheduled(fixedRate = 60000)
     public void isInsertEmail(){
         int a=applyMeet.isInsertEmail();
        if(a>0){

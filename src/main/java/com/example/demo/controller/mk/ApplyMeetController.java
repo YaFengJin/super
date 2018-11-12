@@ -73,9 +73,9 @@ public class ApplyMeetController {
      * @return
      */
     @RequestMapping("/QueryWaitMeet")
-    public  Map<String,Object> QueryWaitMeet(@RequestParam(required=false,defaultValue="1")int limit, @RequestParam(required=false,defaultValue="1")int page,String meetRoom,String UserId){
+    public  Map<String,Object> QueryWaitMeet(@RequestParam(required=false,defaultValue="1")int limit, @RequestParam(required=false,defaultValue="1")int page,String meetRoom){
         Page<Map<String,Object>> pages= PageHelper.startPage(page,limit);
-        List<Map<String, Object>> list = service.isQueryWaitMeet(meetRoom,UserId);
+        List<Map<String, Object>> list = service.isQueryWaitMeet(meetRoom);
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("code",0);
         map.put("msg","");

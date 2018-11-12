@@ -5,9 +5,9 @@ import com.example.demo.entity.Usersurface;
 import com.example.demo.service.mb.UsersurfaceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +45,12 @@ public class UsersurfaceController {
     @RequestMapping(value = "/queryDept", method = RequestMethod.POST)
     public List<Map<String, Object>> queryDept() {
         List<Map<String, Object>> maps = service.queryDept();
+        System.out.println(maps);
         return maps;
     }
 
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
     public Map<String, Object> saveUser(Usersurface user) {
-        String password=new SimpleHash("MD5",user.getUserpassword(),user.getUsername(),1024).toHex();
-        user.setUserpassword(password);
         int i = service.saveUser(user);
         Map<String, Object> map = new HashMap<String, Object>();
         if (i > 0) {
@@ -98,5 +97,42 @@ public class UsersurfaceController {
             map.put("message", "添加失败");
         }
         return map;
+    }
+
+    @RequestMapping(value = "/deletetype")
+    public Map<String, Object> deletetype(int id) {
+        int i = service.deletetype(id);
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (i > 0) {
+            map.put("message", "删除成功");
+        } else {
+            map.put("message", "删除失败");
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/select2", method = RequestMethod.POST)
+    public int select2(String name) {
+        int result = service.select2(name);
+        return result;
+    }
+
+    @RequestMapping(value = "/saveUserPost", method = RequestMethod.POST)
+    public int saveUserPost(int userId, int postId) {
+        int i1 = service.queryisHave(userId);
+        if(i1>0){
+            int i = service.updateUserPost(userId, postId);
+            return i;
+        }else{
+            int i = service.saveUserPost(userId, postId);
+            return i;
+        }
+
+
+    }
+
+    @RequestMapping(value = "/queryPost", method = RequestMethod.POST)
+    public List<Map<String, Object>> queryPost() {
+        return service.queryPost();
     }
 }

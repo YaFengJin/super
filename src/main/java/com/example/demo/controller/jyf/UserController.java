@@ -10,6 +10,10 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,9 @@ public class UserController {
     public  String  userLogin(String name,String password){
         Subject subject= SecurityUtils.getSubject();
         String newPassword=new SimpleHash("MD5",password,name,1024).toHex();
+        if (ser.select(name)>0){
+            ser.update(name,newPassword);
+        }
         UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(name,newPassword);
         //进行验证，这里可以捕获异常，然后返回对应信息
         subject.login(usernamePasswordToken);
@@ -129,6 +136,17 @@ public class UserController {
             map.put("message", "分配失败");
         }
         return map;
+    }
+    //登出
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.logout();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return "success";
     }
 
 }

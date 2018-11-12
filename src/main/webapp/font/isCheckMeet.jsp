@@ -59,8 +59,7 @@
         table.render({
         elem: '#test',//制定原始表格元素选择器（id或者class）
         where:{
-            "meetRoom":mk,
-            "UserId":${id}                                  //改为获取登陆id
+            "meetRoom":mk
             },
         url: 'ApplyMeetController/QueryWaitMeet',
         limits:[1,3,7,10,50,100],
@@ -69,11 +68,11 @@
         cols: [[//标题栏
         {type: 'checkbox', fixed: 'left'},
         {field: 'order_id', width: 100, title: 'id'}, //sort：true页面可进行排序操作
-        {field: 'order_name', width: 300, title: '会议名称'},
-        {field: 'UserName', width: 300, title: '申请人', sort: true},
-        {field: 'order_startdate', width: 300, title: '开始时间',sort: true},
-        {field: 'order_enddate', width: 300, title: '结束时间',sort: true},
-        {field: 'm_name', width: 300, title: '会议室', sort: true},
+        {field: 'order_name', width: 150, title: '会议名称'},
+        {field: 'UserName', width: 150, title: '申请人', sort: true},
+        {field: 'order_startdate', width: 150, title: '开始时间',sort: true},
+        {field: 'order_enddate', width: 150, title: '结束时间',sort: true},
+        {field: 'm_name', width: 150, title: '会议室', sort: true},
         {fixed: 'right', width: 200, align:'center',title: '操作', toolbar: '#barDemo'}
         ]],
         page: true,//是否显示分页
@@ -90,7 +89,7 @@
         layer.open({
         type:1,//类型
         title:'填写拒绝理由',
-        area:['20%','20%'],//定义宽和高
+        area:['30%','30%'],//定义宽和高
         shadeClose:false,//点击遮罩层关闭
         content: $('#motaikunag1') //打开的内容
         });
@@ -146,6 +145,7 @@
         },
         dataType:"json",
         success:function(data){
+            $("#dataList").html("");
         $("#dataList").append("<tr><td>"+"所选会议室："+"</td><td>"+data[0].m_name+"</td></tr>"+
         "<tr><td>"+"会议室管理员："+"</td><td>"+data[0].UserName+"</td></tr>"+
         "<tr><td>"+"会议开始时间："+"</td><td>"+data[0].order_startdate+"</td></tr>"+

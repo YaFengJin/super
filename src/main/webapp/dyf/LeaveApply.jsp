@@ -192,10 +192,10 @@
 </html>
 
 <script type="text/html" id="barDemo">
-    {{#  if(d.LeaveGo == "待审核" || d.LeaveGo == "审核未通过"){ }}
+    {{#  if(d.LeaveGo == "待审核"){ }}
     <button class="layui-btn layui-btn-normal" lay-Event="updleaveapply">修改</button>
     {{#  } }}
-    {{#  if(d.LeaveGo == "审核已通过"){ }}
+{{#  if(d.LeaveGo == "审核已通过" || "审核未通过     "){ }}
     <button class="layui-btn layui-btn-normal" lay-Event="ff">查看</button>
     {{#  } }}
 </script>
@@ -233,7 +233,7 @@
         });
     });
 
-    layui.use(['table','layer','form','layedit', 'laydate','authtree'], function(){
+    layui.use(['table','layer','form','layedit','laydate','authtree'], function(){
         var layer= layui.layer
             ,form = layui.form
             ,layedit = layui.layedit
@@ -276,6 +276,8 @@
 
         form.on('submit(saveLeaveApply)', function(data){
             //发送ajax
+            var a = $('form').serialize();
+            alert(a)
             $.ajax({
                 url:"/saveLeaveApply",
                 type:"post",
@@ -360,11 +362,10 @@
                             $("#UserName1").val(a.UserName);
                             $("#userId1").val(a.LeaveDept);
                             $("#DeptName1").val(a.DeptName);
-                            $("#DeptId1").val(a.DeptId);
+                            $("#DeptId1").val(a.LeaveDept);
                             $("#appLyTime1").val(a.AppLyTime);
                             $("#yLeaveTime1").val(a.YLeaveTime);
                             $("#leaveAtWage1").val(a.leaveAtWage);
-                            $("#leaveGo1").val(a.LeaveGo);
                             $("#leaveAppLyRemak1").val(a.Leave_AppLyRemak);
                             $("#leaveCause1").val(a.LeaveCause);
 

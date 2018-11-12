@@ -156,15 +156,15 @@ public interface dyfDao {
     int saveApply(@Param("wj_id") int wj_id, @Param("b_id") int b_id, @Param("sort_id") int sort_id, @Param("work_id") int work_id, @Param("apply_price") Double apply_price, @Param("apply_number") int apply_number, @Param("useid") String useid, @Param("UserId") String UserId, @Param("apply_comment") String apply_comment, @Param("apply_state") int apply_state, @Param("apply_date") String apply_date);
 
     @Select("<script>"
-            +"SELECT ta.spyj,ta.work_name,ta.work_id,ta.apply_id,ta.apply_number,ta.apply_date,ta.UserName,ta.apply_comment,ta.apply_state,ta.b_bankname,ta.sort_style,ta.wj_name,GROUP_CONCAT(ta.UserName)as name FROM(select b.b_bankname,s.sort_style,wj.wj_name,w.work_name,u.UserName,a.*,FIND_IN_SET(u.UserId,a.useid)as tt from userSurFace u,Apply a,workjin wj,bank b,sort s,WorkSurFace w where wj.wj_id=w.wj_id and w.b_id=b.b_id and w.sort_id=s.sort_id and a.work_id=w.work_id)as ta where ta.tt>0 GROUP BY ta.apply_id"
+            +"SELECT ta.spyj,ta.work_name,ta.work_id,ta.apply_id,ta.apply_number,ta.apply_date,ta.UserName,ta.apply_comment,ta.apply_state,ta.b_bankname,ta.sort_style,ta.wj_name,GROUP_CONCAT(ta.UserName)as name FROM(select b.b_bankname,s.sort_style,wj.wj_name,w.work_name,u.UserName,a.*,FIND_IN_SET(u.UserId,a.useid)as tt from userSurFace u,Apply a,workjin wj,bank b,sort s,WorkSurFace w where wj.wj_id=w.wj_id and w.b_id=b.b_id and w.sort_id=s.sort_id and a.work_id=w.work_id)as ta where ta.tt>0 and ta.UserId=#{UserId} GROUP BY ta.apply_id"
             +" limit #{page},#{limit}"
             +"</script>")
-    List<Map> queryApply(@Param("page") int page, @Param("limit") int limit);
+    List<Map> queryApply(@Param("page") int page, @Param("limit") int limit, @Param("UserId") int UserId);
 
     @Select("<script>"
-            +"select count(*) from Apply a,Bank b,WorkJin wj,Sort s,WorkSurFace w,userSurFace u where u.UserId=a.UserId and a.b_id=b.b_id and a.sort_id=s.sort_id and a.work_id=w.work_id and a.wj_id=wj.wj_id"
+            +"select count(*) from Apply a,Bank b,WorkJin wj,Sort s,WorkSurFace w,userSurFace u where u.UserId=a.UserId and a.b_id=b.b_id and a.sort_id=s.sort_id and a.work_id=w.work_id and a.wj_id=wj.wj_id and a.UserId=#{UserId}"
             +"</script>")
-    int countApply();
+    int countApply(@Param("UserId") int UserId);
 
     @Delete("<script>"
             +"delete from Apply where apply_id = #{apply_id}"
@@ -391,9 +391,9 @@ public interface dyfDao {
             +"</script>")
     List<Map> querycontractmoney(@Param("UserId") int UserId);
 
-    @Insert("insert into leave_apply(UserId,LeaveDept,AppLyTime,YLeaveTime,SleaveTime,WageUpTime,LeaveGo,Leave_AppLyRemak,Leave_AppLyAccess,LeaveCause,leaveAtWage) values" +
-            "(#{userId},#{leaveDept},#{appLyTime},#{yLeaveTime},#{sleaveTime},#{wageUpTime},#{leaveGo},#{leaveAppLyRemak},#{leaveAppLyAccess},#{leaveCause},#{leaveAtWage})"
-            )
+    @Insert("<script>"+
+            "insert into leave_apply(UserId,LeaveDept,AppLyTime,YLeaveTime,SleaveTime,WageUpTime,LeaveGo,Leave_AppLyRemak,Leave_AppLyAccess,LeaveCause,leaveAtWage) values(#{userId},#{leaveDept},#{appLyTime},#{yLeaveTime},#{sleaveTime},#{wageUpTime},#{leaveGo},#{leaveAppLyRemak},#{leaveAppLyAccess},#{leaveCause},#{leaveAtWage})"
+            +"</script>")
     int saveLeaveApply(LeaveApply la);
 
     @Update("<script> "
@@ -408,7 +408,7 @@ public interface dyfDao {
     List<Map> queryLeaveApply(@Param("page") int page, @Param("limit") int limit);
 
     @Select("<script>"
-            +"SELECT count(*) FROM leave_apply AS la left join usersurface u on la.UserId=u.UserId LEFT JOIN dept d on u.DeptId=d.DeptId"
+            +"SELECT count(*) FROM leave_apply AS la left join usersurface u on la.UserId=u.UserId LEFT JOIN dept d on u.DeptId=d.DeptId where la.LeaveGo='待审核'"
             +"</script>")
     int countLeaveApply();
 
@@ -448,12 +448,17 @@ public interface dyfDao {
     int updateleaveapplyleavego(@Param("spyj") String spyj, @Param("Leave_AppLyId") int Leave_AppLyId);
 
     @Update("<script> "
-            +"update leave_apply set LeaveGo='审核已通过' where Leave_AppLyId=#{Leave_AppLyId}"
+            +"update leave_apply set LeaveGo='审核已通过',SleaveTime=#{time},WageUpTime=#{time} where Leave_AppLyId=#{Leave_AppLyId}"
             + "</script>")
-    int updateleaveapplytg1(@Param("Leave_AppLyId") int Leave_AppLyId);
+    int updateleaveapplytg1(@Param("Leave_AppLyId") int Leave_AppLyId, @Param("time") String time);
 
     @Update("<script> "
             +"update emp_record set Emp_StateId=2 where UserId=#{UserId}"
             + "</script>")
     int updateleaveapplytg2(@Param("UserId") int UserId);
+
+    @Select("<script>"
+            +"SELECT count(*) FROM apply a where UserId=#{UserId} and a.apply_state=3"
+            +"</script>")
+    int queryApply2(@Param("UserId") int UserId);
 }

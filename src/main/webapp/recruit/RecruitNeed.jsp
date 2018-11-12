@@ -207,7 +207,6 @@
         var table = layui.table;
         var $ = layui.$;
 
-
         var postAsk = layedit.build('postAsk'); //建立编辑器
         var updatepostAsk = layedit.build('updatepostAsk');
         //建立日期
@@ -288,9 +287,10 @@
                             where: {begintime: "", endtime: ""}
                         });
                         alert("添加成功");
-                        parent.layer.close(layer.index);
+                        layer.close(layer.index);
                     } else{
                         alert("添加失败");
+                        layer.close(layer.index);
                     }
                 }
             };
@@ -314,6 +314,7 @@
                         layer.close(layer.index);
                     } else{
                         alert("修改失败");
+                        layer.close(layer.index);
                     }
                 }
             };

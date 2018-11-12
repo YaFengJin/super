@@ -7,34 +7,19 @@
 <html>
 <head>
     <title>Title</title>
-
-    <link rel="stylesheet" href="layui/css/layui.css">
-    <meta charset="utf-8">
-    <title>Bootstrap 实例 - 模态框（Modal）插件</title>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <meta charset="utf-8">
-    <title>Bootstrap 实例 - 水平表单</title>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <%--弹出框--%>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/layui/css/layui.css"  media="all">
 </head>
-<%--弹出框--%>
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="layui/css/layui.css"  media="all">
 
 
-<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="layui/layui.js"></script>
-<script src="<%=basePath %>/static/layui/layui.js"></script>
-<script src="<%=basePath %>/static/layui/lay/modules/form.js"></script>
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../static/layui/layui.js"></script>
+<script type="text/javascript" src="../static/layui/lay/modules/form.js"></script>
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" media="all">
+<script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
 <style>
     #xj {
         position: absolute;
@@ -46,14 +31,34 @@
 }
 </style>
 <body>
-<%--
-&lt;%&ndash;居中弹出&ndash;%&gt;
+<!--添加的时候选择部门-->
+<form class="layui-form" id="DepttreeView" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择部门</label>
+        <div class="layui-input-inline">
+            <div id="DeptLAY-auth-tree-index"></div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div id="LAY-auth-tree-submit"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline" id="DeptNames">
 
-<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;position: absolute;left: 800px;margin-top: 100px">
-    <button class="layui-btn layui-btn-normal" data-method="offset" data-type="auto">新建新闻</button>
-</div>
-<ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-slot="3820120620" data-ad-client="ca-pub-6111334333458862"></ins>
---%>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <button class="layui-btn" type="button" id="saveDept" lay-submit lay-filter="LAY-auth-tree-submit">确定
+            </button>
+        </div>
+    </div>
+</form>
+
 
 <%--模糊搜索--%>
 <div style="margin-top: 17px;margin-left: 100px;">
@@ -130,7 +135,8 @@
                     <tr>
                         <td>发布范围</td>
                         <td>
-                            <input type="text" name="deptId" class="deptId form-control" id="deptId">
+                            <input type="text" name="deptId" id="deptId">
+                            <input type="text" name="deptname" class="deptId form-control" id="deptname">
                         </td>
                     </tr>
                     <tr style="display: none">
@@ -261,14 +267,71 @@
     <a class="layui-btn layui-btn-xs" lay-event="updat">终止</a>
     <a class="layui-btn layui-btn-xs" lay-event="upda">生效</a>
 </script>
-<script>
+<script type="text/javascript">
+    layui.config({
+        base: '../static/extends/',
+    }).extend({
+        authtree: 'authtree'
+    });
 
-    layui.use(['form','table','laydate',], function () {
+    layui.use(['form','table','laydate','authtree'], function () {
         var form = layui.form,
             laydate = layui.laydate,
             $=layui.jquery;
+           var authtree=layui.authtree;
+        //封装ajax
+        function jQueryajax(url, data, type, dataType, response) {
+            $(function () {
+                $.ajax({
+                    url: url,
+                    type: type,
+                    data: data,
+                    dataType: dataType,
+                    success: function (res) {
+                        response(res);
+                    }
+                });
+            });
+        };
+
         var a = "";
         fall(a);
+
+        //查询部门
+        $("#deptname").click(function () {
+            jQueryajax("/recruit/queryDept", null, "post", "json", function (response) {
+                //生成树形菜单
+                authtree.render('#DeptLAY-auth-tree-index', response, {
+                    autowidth: true,
+                    layfilter: 'Deptlay-check-auth',
+                });
+                //获取选中的改变事件,通过id串去查询部门的名称并显示在页面上
+                authtree.on('change(Deptlay-check-auth)', function (trees) {
+                    var a = [];
+                    for (var i = 0; i < authtree.getChecked('#DeptLAY-auth-tree-index').length; i++) {
+                        a[a.length] = authtree.getChecked('#DeptLAY-auth-tree-index')[i];
+                    }
+                    //数组拆分成字符串
+                    var b = a.join(",");
+                    jQueryajax("/recruit/queryDeptName", {"deptid": b}, "post", "json", function (resp) {
+                        var a = resp.join(",");
+                        $("#DeptNames").html(a);
+                    });
+                });
+                $("#saveDept").click(function () {
+                    $("#deptname").val($("#DeptNames").html());
+                    $("#deptId").val(authtree.getChecked('#DeptLAY-auth-tree-index'));
+                    layer.close(layer.index);
+                });
+            });
+            layer.open({
+                type: 1,//类型
+                title: '选择部门',//标题
+                shadeClose: false,//点击遮罩层关闭
+                offset: 't',
+                content: $('#DepttreeView') //打开的内容
+            });
+        });
 
     });
     /*

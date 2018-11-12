@@ -1,3 +1,5 @@
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -6,6 +8,10 @@
     <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
     <script type="text/javascript"  src="../static/dyf_js/jquery-3.2.1.min.js"></script>
 </head>
+<%
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String time = format.format(new Date());
+%>
 <body>
 
 <div class="layui-card-body">
@@ -50,6 +56,8 @@
         </div>
     </form>
 </div>
+
+<input type="tel" id="time" value="<%=time%>" hidden>
 
 </body>
 
@@ -191,23 +199,41 @@
     $("#sptg").click(function() {
         var Leave_AppLyId = $(this).parent().parent().find("table").find("tbody").find("div").eq(0).html();
         var UserId = $(this).parent().parent().find("table").find("tbody").find("div").eq(1).html();
+        var time = $("#time").val()
         layer.confirm('你确定通过这个申请吗？', {
             btn: ['确定','取消'] //按钮
         },function () {
+
             $.ajax({
-                url: "/LeaveApplyshtg",
+                url: "/queryApply2",
                 type: "post",
                 data: {
-                    "Leave_AppLyId": Leave_AppLyId,
                     "UserId":UserId
                 },
                 dataType: "json",
                 success: function (data) {
-                    alert(data.message);
-                    layer.closeAll();
-                    location.reload();
+                    if (data>0){
+                        alert("有领用物品没归还！ 请归还！")
+                    }else {
+                        $.ajax({
+                            url: "/LeaveApplyshtg",
+                            type: "post",
+                            data: {
+                                "Leave_AppLyId": Leave_AppLyId,
+                                "UserId":UserId,
+                                "time":time
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                alert(data.message);
+                                layer.closeAll();
+                                location.reload();
+                            }
+                        });
+                    }
                 }
             });
+
         });
     });
 

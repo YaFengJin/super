@@ -53,12 +53,12 @@
         //加载表格内容
         cols: [[//标题栏
         {type: 'checkbox', fixed: 'left'},
-        {field: 'order_id', width: 150, title: 'id'}, //sort：true页面可进行排序操作
-        {field: 'order_name', width: 300, title: '会议名称'},
-        {field: 'UserName', width: 300, title: '申请人', sort: true},
-        {field: 'order_startdate', width: 300, title: '开始时间',sort: true},
-        {field: 'order_enddate', width: 300, title: '结束时间',sort: true},
-        {field: 'm_name', width: 300, title: '会议室', sort: true},
+        {field: 'order_id', width: 125, title: 'id'}, //sort：true页面可进行排序操作
+        {field: 'order_name', width:150, title: '会议名称'},
+        {field: 'UserName', width: 150, title: '申请人', sort: true},
+        {field: 'order_startdate', width: 150, title: '开始时间',sort: true},
+        {field: 'order_enddate', width: 150, title: '结束时间',sort: true},
+        {field: 'm_name', width: 150, title: '会议室', sort: true},
         {fixed: 'right', width: 180, align:'center',title: '操作', toolbar: '#barDemo'}
         ]],
         page: true,//是否显示分页
@@ -78,6 +78,7 @@
         },
         dataType:"json",
         success:function(data){
+            $("#dataList").html("");
         $("#dataList").append("<tr><td>"+"所选会议室："+"</td><td>"+data[0].m_name+"</td></tr>"+
         "<tr><td>"+"会议室管理员："+"</td><td>"+data[0].UserName+"</td></tr>"+
         "<tr><td>"+"会议开始时间："+"</td><td>"+data[0].order_startdate+"</td></tr>"+

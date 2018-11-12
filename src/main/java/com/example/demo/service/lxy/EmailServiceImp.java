@@ -48,16 +48,48 @@ public class EmailServiceImp implements EmailService{
         }
         return result;
     }
+    /*
+    * 更新草稿箱及添加
+    * */
+    @Override
+    @Transactional
+    public int updateEmailBody(EmailBody er, String bRecipients) {
+        int result1=0;
+        int a=dao.updateEmailBody(er);
+        if(a>0){
+            int currentId=er.getbId();
+            if(currentId>0&&bRecipients!=null){
+                String[] userIds=bRecipients.split(",");//分割字符串
+                List<EmailRecord> list=new ArrayList<EmailRecord>();
+                for(int i = 0; i < userIds.length; i++){
+                    EmailRecord e=new EmailRecord();
+                    e.setUserId(Integer.parseInt(userIds[i]));
+                    e.setbId(currentId);
+                    list.add(e);
+                }
+                Map<String,Object> map=new HashMap<String,Object>();
+                int record=dao.saveEmailRecord(list);
+                if(record>0){
+                    result1=1;
+                }
+            }
+        }else {
+            result1=0;
+        }
+        return result1;
+    }
+    /*
+    * 添加草稿箱
+    * */
+    @Override
+    public int addDrafts(EmailBody er) {
+        return dao.addDrafts(er);
+    }
 
 
     @Override
     public List<Map<String, Object>> findEmailBody(String bPerson) {
         return dao.findEmailBody(bPerson);
-    }
-
-    @Override
-    public int updateEmailBody(EmailBody er) {
-        return dao.updateEmailBody(er);
     }
 
     @Override

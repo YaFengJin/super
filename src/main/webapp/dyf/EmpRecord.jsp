@@ -41,7 +41,7 @@
                 <label class="layui-form-label">部门</label>
                 <div class="layui-input-inline">
                     <input type="tel" name="deptId" readonly id="deptId" autocomplete="off" style="display:none;" class="layui-input">
-                    <input type="tel" readonly id="deptname" autocomplete="off" class="layui-input">
+                    <input type="tel" readonly id="deptname" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -66,7 +66,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">政治面貌</label>
                 <div class="layui-input-inline">
-                    <select id="dictionariesId" name="dictionariesId">
+                    <select id="dictionariesId" name="dictionariesId" lay-verify="required"
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -77,7 +77,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">员工类型</label>
                 <div class="layui-input-inline">
-                    <select id="empTypeId" name="empTypeId" lay-verify="required">
+                    <select id="empTypeId" name="empTypeId" lay-verify="required" lay-verify="required">
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -94,7 +94,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">所学专业</label>
                 <div class="layui-input-inline">
-                    <select id="dicDictionariesId" name="dicDictionariesId">
+                    <select id="dicDictionariesId" name="dicDictionariesId" lay-verify="required">
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -111,7 +111,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">性别</label>
                 <div class="layui-input-inline">
-                    <select id="empInfoGender" name="empInfoGender">
+                    <select id="empInfoGender" name="empInfoGender" lay-verify="required">
                         <option value="">请选择</option>
                         <option>男</option>
                         <option>女</option>
@@ -145,7 +145,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">血型</label>
                 <div class="layui-input-inline">
-                    <select name="empInfoBlood">
+                    <select name="empInfoBlood" >
                         <option value="">请选择</option>
                         <option>A</option>
                         <option>B</option>
@@ -196,7 +196,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">入职日期</label>
                 <div class="layui-input-inline">
-                    <input type="Date" id="entryTime" name="entryTime" autocomplete="off" class="layui-input">
+                    <input type="Date" id="entryTime" name="entryTime" lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
@@ -291,7 +291,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">参加工作日期</label>
                 <div class="layui-input-inline">
-                    <input type="Date" id="workTime" name="workTime" autocomplete="off" class="layui-input">
+                    <input type="date" id="workTime" name="workTime" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </div>
@@ -345,7 +345,6 @@
                         <option>工程师</option>
                         <option>高级工程师</option>
                         <option>研高工</option>
-                        <option>职称</option>
                     </select>
                 </div>
             </div>
@@ -355,7 +354,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">最高学历</label>
                 <div class="layui-input-inline">
-                    <select name="highestEduction" id="highestEduction">
+                    <select name="highestEduction" id="highestEduction" lay-verify="required">
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -378,7 +377,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">最高学位</label>
                 <div class="layui-input-inline">
-                    <select name="highestDegree" id="highestDegree">
+                    <select name="highestDegree" id="highestDegree" lay-verify="required">
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -810,7 +809,7 @@
                             if(d[i].DictionariesTypeName=='学历') {
                                 $("#highestEduction").append("<option value='"+d[i].DictionariesId+"'>"+d[i].DictionariesName+"</option>");
                                 $("#highestDegree").append("<option value='"+d[i].DictionariesId+"'>"+d[i].DictionariesName+"</option>");
-                            }else if(d[i].DictionariesTypeName=='所学专业'){
+                            }else if(d[i].DictionariesTypeName=='专业'){
                                 $("#dicDictionariesId").append("<option value='"+d[i].DictionariesId+"'>"+d[i].DictionariesName+"</option>");
                             }else if(d[i].DictionariesTypeName=='政治面貌'){
                                 $("#dictionariesId").append("<option value='"+d[i].DictionariesId+"'>"+d[i].DictionariesName+"</option>");

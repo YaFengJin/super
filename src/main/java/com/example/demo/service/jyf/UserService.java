@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
-    List<Map<String,Object>>userLogin(String name,String password);
+    List<Map<String,Object>>userLogin(String name, String password);
+    //查询
+    int select(String name);
+    //更新
+    int update(String name, String password);
     //根据登录名查询密码
     Usersurface findByUser(String name);
     //查询菜单
@@ -26,5 +30,5 @@ public interface UserService {
     //查询职位拥有的权限
      List<Map<String, Object>> queryPostMenu(int id);
     //分配权限
-     int grantMenuforpost(int id,String menuid);
+     int grantMenuforpost(int id, String menuid);
 }
