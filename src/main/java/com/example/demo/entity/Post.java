@@ -5,10 +5,6 @@ import java.util.List;
 public class Post {
     private Integer postid;
 
-    private Integer deptid;
-
-    private String posyfid;
-
     private String postname;
 
     private String duty;
@@ -27,28 +23,12 @@ public class Post {
         this.postid = postid;
     }
 
-    public Integer getDeptid() {
-        return deptid;
-    }
-
-    public void setDeptid(Integer deptid) {
-        this.deptid = deptid;
-    }
-
-    public String getPosyfid() {
-        return posyfid;
-    }
-
-    public void setPosyfid(String posyfid) {
-        this.posyfid = posyfid == null ? null : posyfid.trim();
-    }
-
     public String getPostname() {
         return postname;
     }
 
     public void setPostname(String postname) {
-        this.postname = postname == null ? null : postname.trim();
+        this.postname = postname;
     }
 
     public String getDuty() {
@@ -56,21 +36,7 @@ public class Post {
     }
 
     public void setDuty(String duty) {
-        this.duty = duty == null ? null : duty.trim();
-    }
-
-    public Post(Integer postid, Integer deptid, String posyfid, String postname, String duty, Dept dept, List<Post_Menu> post_menus, List<User_Post> user_posts) {
-        this.postid = postid;
-        this.deptid = deptid;
-        this.posyfid = posyfid;
-        this.postname = postname;
         this.duty = duty;
-        this.dept = dept;
-        this.post_menus = post_menus;
-        this.user_posts = user_posts;
-    }
-
-    public Post() {
     }
 
     public Dept getDept() {
@@ -95,5 +61,22 @@ public class Post {
 
     public void setUser_posts(List<User_Post> user_posts) {
         this.user_posts = user_posts;
+    }
+
+    public Post(Integer postid,String postname, String duty, Dept dept, List<Post_Menu> post_menus, List<User_Post> user_posts) {
+        this.postid = postid;
+        this.postname = postname;
+        this.duty = duty;
+        this.dept = dept;
+        this.post_menus = post_menus;
+        this.user_posts = user_posts;
+    }
+
+    public Post() {
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

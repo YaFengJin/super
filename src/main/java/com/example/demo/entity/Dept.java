@@ -7,7 +7,7 @@ public class Dept {
 
     private String deptname;
 
-    private String deptfid;
+    private Integer deptfid;
 
     private String depttype;
 
@@ -31,12 +31,12 @@ public class Dept {
         this.deptname = deptname == null ? null : deptname.trim();
     }
 
-    public String getDeptfid() {
+    public Integer getDeptfid() {
         return deptfid;
     }
 
-    public void setDeptfid(String deptfid) {
-        this.deptfid = deptfid == null ? null : deptfid.trim();
+    public void setDeptfid(Integer deptfid) {
+        this.deptfid = deptfid;
     }
 
     public String getDepttype() {
@@ -63,15 +63,4 @@ public class Dept {
         this.post = post;
     }
 
-    public Dept(Integer deptid, String deptname, String deptfid, String depttype, List<Usersurface> usersurfaces, List<Post> post) {
-        this.deptid = deptid;
-        this.deptname = deptname;
-        this.deptfid = deptfid;
-        this.depttype = depttype;
-        this.usersurfaces = usersurfaces;
-        this.post = post;
-    }
-
-    public Dept() {
-    }
 }

@@ -3,10 +3,6 @@ package com.example.demo.entity;
 public class Post_Menu {
     private Integer postMenuid;
 
-    private Integer menuid;
-
-    private Integer postid;
-
     private Post post;
 
     private Menu menu;
@@ -19,26 +15,9 @@ public class Post_Menu {
         this.postMenuid = postMenuid;
     }
 
-    public Integer getMenuid() {
-        return menuid;
-    }
 
-    public void setMenuid(Integer menuid) {
-        this.menuid = menuid;
-    }
-
-    public Integer getPostid() {
-        return postid;
-    }
-
-    public void setPostid(Integer postid) {
-        this.postid = postid;
-    }
-
-    public Post_Menu(Integer postMenuid, Integer menuid, Integer postid, Post post, Menu menu) {
+    public Post_Menu(Integer postMenuid,  Post post, Menu menu) {
         this.postMenuid = postMenuid;
-        this.menuid = menuid;
-        this.postid = postid;
         this.post = post;
         this.menu = menu;
     }
